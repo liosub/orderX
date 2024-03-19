@@ -9,4 +9,4 @@ npm run db:create
 npm run db:migrate
 4- build and run javascript
 npm run build
-npm run dev
+npm run devu
