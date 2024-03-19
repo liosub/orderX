@@ -55,7 +55,7 @@ exports.getAllOrderTable = getAllOrderTable;
 const getAll = () => __awaiter(void 0, void 0, void 0, function* () {
     return Order_1.default.findAll({
         attributes: ["order_id", "email", "roomNo", "tableNo", "revenue", "createdAt", "status", "notes", "profile_id",
-            [sequelize_1.Sequelize.fn("COUNT", sequelize_1.Sequelize.col("*")), "orderCount"],
+            // [Sequelize.fn("COUNT", Sequelize.col("*")), "orderCount"],
             // [Sequelize.fn("SUM", Sequelize.col("revenue")), "orderSum"],
         ],
         include: [
