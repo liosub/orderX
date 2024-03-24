@@ -1,7 +1,7 @@
 import { Router, Request, Response } from 'express'
 import * as itemsServiceImpl from '../db/services/ItemsServiceImpl'
 import { ItemInput } from '../db/models/Items'
-import upload, { uploadItmes } from '../middleware/upload';
+import  { upload,uploadItmes } from '../middleware/upload';
 import verifyToken from '../middleware/authMiddleware';
 
 const itemsRouter = Router()
