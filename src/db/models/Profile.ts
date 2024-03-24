@@ -11,7 +11,7 @@ interface ProfileAttributes{
     logo?:string;
     bannerImage?:string;
     url?:string;
-    QRCode?:string;
+    QRCode:string;
     createdAt?: Date;
     updatedAt?: Date;
 
@@ -39,6 +39,7 @@ export const PROFILE_MODEL: ModelAttributes<Profile> = {
       },
       businessName: {
         type: DataTypes.STRING,
+        allowNull: false,
         unique: true
       },
       tag: {
