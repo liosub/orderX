@@ -12,9 +12,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteById = exports.update = exports.getById = exports.getByEmail = exports.findOrCreate = exports.create = void 0;
+exports.deleteById = exports.qrCodeGenerator = exports.update = exports.getById = exports.getByEmail = exports.findOrCreate = exports.create = void 0;
 const Profile_1 = __importDefault(require("../models/Profile"));
 const bcrypt_1 = __importDefault(require("bcrypt"));
+const qrGenerator_1 = require("../../middleware/qrGenerator");
 const create = (payload) => __awaiter(void 0, void 0, void 0, function* () {
     const encryptedUserPassword = yield bcrypt_1.default.hash(payload.password, 10);
     payload.password = encryptedUserPassword;
@@ -65,6 +66,17 @@ const update = (id, payload) => __awaiter(void 0, void 0, void 0, function* () {
     return updateProfile;
 });
 exports.update = update;
+const qrCodeGenerator = (id) => __awaiter(void 0, void 0, void 0, function* () {
+    const profile = yield Profile_1.default.findByPk(id);
+    if (!profile) {
+        // @todo throw custom error
+        throw new Error('not found');
+    }
+    var base64str = (0, qrGenerator_1.base64_encode)("/home/fancypanda/rev/orderX/public/images/uploads/" + profile.logo);
+    yield (0, qrGenerator_1.createQR)(profile.url, base64str, 150, 50);
+    return;
+});
+exports.qrCodeGenerator = qrCodeGenerator;
 const deleteById = (id) => __awaiter(void 0, void 0, void 0, function* () {
     const deletedProfileCount = yield Profile_1.default.destroy({
         where: { profile_id: id }

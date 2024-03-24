@@ -40,7 +40,7 @@ const profileServiceImpl = __importStar(require("../db/services/ProfileServiceIm
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const userToken_1 = __importDefault(require("../middleware/userToken"));
 const authMiddleware_1 = __importDefault(require("../middleware/authMiddleware"));
-const upload_1 = __importDefault(require("../middleware/upload"));
+const upload_1 = require("../middleware/upload");
 const profileRouter = (0, express_1.Router)();
 profileRouter.get('/:id', authMiddleware_1.default, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const id = Number(req.params.id);
@@ -61,7 +61,7 @@ profileRouter.post('/signup', (req, res) => __awaiter(void 0, void 0, void 0, fu
         throw new Error("Invalid user data");
     }
 }));
-profileRouter.post('/create', authMiddleware_1.default, upload_1.default, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+profileRouter.post('/create', authMiddleware_1.default, upload_1.upload, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const payload = req.body;
     const files = req.files;
     payload.logo = files["logo"][0].filename;
@@ -78,6 +78,10 @@ profileRouter.post('/create', authMiddleware_1.default, upload_1.default, (req, 
         res.status(400);
         throw new Error("Invalid user data");
     }
+}));
+profileRouter.post('/generateQR', authMiddleware_1.default, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    yield profileServiceImpl.qrCodeGenerator(req.token._id);
+    res.status(201).json({});
 }));
 profileRouter.post('/signin', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const payload = req.body;
