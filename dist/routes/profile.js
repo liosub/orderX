@@ -37,7 +37,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const profileServiceImpl = __importStar(require("../db/services/ProfileServiceImpl"));
-const bcrypt_1 = __importDefault(require("bcrypt"));
 const userToken_1 = __importDefault(require("../middleware/userToken"));
 const authMiddleware_1 = __importDefault(require("../middleware/authMiddleware"));
 const upload_1 = require("../middleware/upload");
@@ -47,27 +46,12 @@ profileRouter.get('/:id', authMiddleware_1.default, (req, res) => __awaiter(void
     const result = yield profileServiceImpl.getById(id);
     return res.status(200).send(result);
 }));
-profileRouter.post('/signup', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const payload = req.body;
-    const result = yield profileServiceImpl.create(payload);
-    if (result) {
-        res.status(201).json({
-            result,
-            token: yield (0, userToken_1.default)(result),
-        });
-    }
-    else {
-        res.status(400);
-        throw new Error("Invalid user data");
-    }
-}));
 profileRouter.post('/create', authMiddleware_1.default, upload_1.upload, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const payload = req.body;
     const files = req.files;
     payload.logo = files["logo"][0].filename;
     payload.bannerImage = files["bannerImage"][0].filename;
-    payload.QRCode = files["QRCode"][0].filename;
-    const result = yield profileServiceImpl.update(req.token._id, payload);
+    const result = yield profileServiceImpl.createNewProfile(req.token._id, payload);
     if (result) {
         res.status(201).json({
             result,
@@ -77,26 +61,6 @@ profileRouter.post('/create', authMiddleware_1.default, upload_1.upload, (req, r
     else {
         res.status(400);
         throw new Error("Invalid user data");
-    }
-}));
-profileRouter.post('/generateQR', authMiddleware_1.default, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    yield profileServiceImpl.qrCodeGenerator(req.token._id);
-    res.status(201).json({});
-}));
-profileRouter.post('/signin', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const payload = req.body;
-    const result = yield profileServiceImpl.getByEmail(payload.email);
-    const passwordMatch = (yield bcrypt_1.default.compare(payload.password, result.password));
-    if (result && passwordMatch) {
-        res.json({
-            businessName: result.businessName,
-            email: result.email,
-            token: yield (0, userToken_1.default)(result),
-        });
-    }
-    else {
-        res.status(400);
-        throw new Error("Invalid credentials");
     }
 }));
 profileRouter.put('/:id', authMiddleware_1.default, (req, res) => __awaiter(void 0, void 0, void 0, function* () {

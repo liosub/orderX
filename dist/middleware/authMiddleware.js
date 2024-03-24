@@ -28,7 +28,6 @@ const verifyToken = (req, res, next) => __awaiter(void 0, void 0, void 0, functi
             const decoded = jsonwebtoken_1.default.verify(bearerToken, ACCESS_TOKEN_PRIVATE_KEY);
             req.token = decoded;
         }
-        console.log(req.token._id);
         const validUser = yield models_1.Profile.findByPk(req.token._id);
         if ((validUser === null || validUser === void 0 ? void 0 : validUser.profile_id) == req.token._id) {
             next();

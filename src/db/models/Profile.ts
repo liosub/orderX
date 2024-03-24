@@ -39,7 +39,6 @@ export const PROFILE_MODEL: ModelAttributes<Profile> = {
       },
       businessName: {
         type: DataTypes.STRING,
-        allowNull: false,
         unique: true
       },
       tag: {

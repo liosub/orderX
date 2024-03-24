@@ -12,10 +12,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteById = exports.qrCodeGenerator = exports.update = exports.getById = exports.getByEmail = exports.findOrCreate = exports.create = void 0;
+exports.deleteById = exports.qrCodeGenerator = exports.createNewProfile = exports.update = exports.getById = exports.getByEmail = exports.findOrCreate = exports.create = void 0;
 const Profile_1 = __importDefault(require("../models/Profile"));
+const dotenv_1 = __importDefault(require("dotenv"));
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const qrGenerator_1 = require("../../middleware/qrGenerator");
+dotenv_1.default.config();
+const URI = process.env.URI;
 const create = (payload) => __awaiter(void 0, void 0, void 0, function* () {
     const encryptedUserPassword = yield bcrypt_1.default.hash(payload.password, 10);
     payload.password = encryptedUserPassword;
@@ -66,15 +69,29 @@ const update = (id, payload) => __awaiter(void 0, void 0, void 0, function* () {
     return updateProfile;
 });
 exports.update = update;
-const qrCodeGenerator = (id) => __awaiter(void 0, void 0, void 0, function* () {
+const createNewProfile = (id, payload) => __awaiter(void 0, void 0, void 0, function* () {
     const profile = yield Profile_1.default.findByPk(id);
     if (!profile) {
         // @todo throw custom error
         throw new Error('not found');
     }
-    var base64str = (0, qrGenerator_1.base64_encode)("/home/fancypanda/rev/orderX/public/images/uploads/" + profile.logo);
-    yield (0, qrGenerator_1.createQR)(profile.url, base64str, 150, 50);
-    return;
+    payload.url = `${URI}/profile/${profile.profile_id}`;
+    payload.QRCode = `${payload.businessName}QR`;
+    const updateProfile = yield profile.update(payload);
+    yield (0, exports.qrCodeGenerator)(updateProfile);
+    return updateProfile;
+});
+exports.createNewProfile = createNewProfile;
+const qrCodeGenerator = (payload) => __awaiter(void 0, void 0, void 0, function* () {
+    const qrCodeName = payload.QRCode || payload.businessName + "QR";
+    const url = payload.url || `${URI}/profile/${payload.profile_id}`;
+    var base64str = (0, qrGenerator_1.base64_encode)("./public/images/uploads/" + payload.logo);
+    if (payload.bannerImage) {
+        yield (0, qrGenerator_1.createQR)(qrCodeName, url, base64str, 150, 50);
+    }
+    else {
+        throw new Error('missing parameters');
+    }
 });
 exports.qrCodeGenerator = qrCodeGenerator;
 const deleteById = (id) => __awaiter(void 0, void 0, void 0, function* () {

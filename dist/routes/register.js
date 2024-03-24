@@ -35,41 +35,39 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.base64_decode = exports.base64_encode = exports.createQR = void 0;
-const QRCode = __importStar(require("qrcode"));
-const canvas_1 = require("canvas");
-const fs_1 = __importDefault(require("fs"));
-function createQR(businessName, dataForQRcode, center_image, width, cwidth) {
-    return __awaiter(this, void 0, void 0, function* () {
-        const canvas = (0, canvas_1.createCanvas)(width, width);
-        center_image = "data:image/png;base64," + center_image;
-        QRCode.toCanvas(canvas, dataForQRcode, {
-            errorCorrectionLevel: "H",
-            margin: 1,
-            color: {
-                dark: "#000000",
-                light: "#ffffff",
-            },
+const express_1 = require("express");
+const profileServiceImpl = __importStar(require("../db/services/ProfileServiceImpl"));
+const bcrypt_1 = __importDefault(require("bcrypt"));
+const userToken_1 = __importDefault(require("../middleware/userToken"));
+const registerRouter = (0, express_1.Router)();
+registerRouter.post('/signup', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const payload = req.body;
+    const result = yield profileServiceImpl.create(payload);
+    if (result) {
+        res.status(201).json({
+            result,
+            token: yield (0, userToken_1.default)(result),
         });
-        const ctx = canvas.getContext("2d");
-        const img = yield (0, canvas_1.loadImage)(center_image);
-        const center = (width - cwidth * 1.40) / 2;
-        ctx.drawImage(img, center, center, cwidth, cwidth);
-        const buffer = canvas.toBuffer("image/png");
-        yield fs_1.default.writeFileSync(`./public/images/QRcodes/${businessName}.png`, buffer);
-    });
-}
-exports.createQR = createQR;
-function base64_encode(file) {
-    var bitmap = fs_1.default.readFileSync(file);
-    return Buffer.from(bitmap).toString('base64');
-}
-exports.base64_encode = base64_encode;
-function base64_decode(imageData) {
-    return __awaiter(this, void 0, void 0, function* () {
-        const data = imageData.replace(/^data:image\/\w+;base64,/, "");
-        const buffer = Buffer.from(data, "base64");
-        yield fs_1.default.writeFileSync("image.png", buffer);
-    });
-}
-exports.base64_decode = base64_decode;
+    }
+    else {
+        res.status(400);
+        throw new Error("Invalid user data");
+    }
+}));
+registerRouter.post('/signin', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const payload = req.body;
+    const result = yield profileServiceImpl.getByEmail(payload.email);
+    const passwordMatch = (yield bcrypt_1.default.compare(payload.password, result.password));
+    if (result && passwordMatch) {
+        res.json({
+            businessName: result.businessName,
+            email: result.email,
+            token: yield (0, userToken_1.default)(result),
+        });
+    }
+    else {
+        res.status(400);
+        throw new Error("Invalid credentials");
+    }
+}));
+exports.default = registerRouter;

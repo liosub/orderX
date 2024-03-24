@@ -32,7 +32,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteById = exports.qrCodeGenerator = exports.update = exports.findOrCreate = exports.create = exports.getByEmail = exports.getById = void 0;
+exports.deleteById = exports.update = exports.createNewProfile = exports.findOrCreate = exports.create = exports.getByEmail = exports.getById = void 0;
 const profileService = __importStar(require("./ProfileService"));
 const getById = (id) => {
     return profileService.getById(id);
@@ -50,14 +50,14 @@ const findOrCreate = (payload) => __awaiter(void 0, void 0, void 0, function* ()
     return profileService.findOrCreate(payload);
 });
 exports.findOrCreate = findOrCreate;
+const createNewProfile = (id, payload) => __awaiter(void 0, void 0, void 0, function* () {
+    return profileService.createNewProfile(id, payload);
+});
+exports.createNewProfile = createNewProfile;
 const update = (id, payload) => __awaiter(void 0, void 0, void 0, function* () {
     return profileService.update(id, payload);
 });
 exports.update = update;
-const qrCodeGenerator = (id) => __awaiter(void 0, void 0, void 0, function* () {
-    return profileService.qrCodeGenerator(id);
-});
-exports.qrCodeGenerator = qrCodeGenerator;
 const deleteById = (id) => {
     return profileService.deleteById(id);
 };

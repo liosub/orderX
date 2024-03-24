@@ -68,19 +68,19 @@ export const createNewProfile = async (id: number, payload: Partial<ProfileInput
         // @todo throw custom error
         throw new Error('not found')
     }
-    profile.url = `${URI}/profile/${payload.profile_id}`;
-    profile.QRCode = await qrCodeGenerator(profile);
-    const updateProfile = await profile.update(payload)
+    payload.url = `${URI}/profile/${profile.profile_id}`;
+    payload.QRCode= `${payload.businessName}QR`;
+    const updateProfile = await profile.update(payload);
+    await qrCodeGenerator(updateProfile);
     return updateProfile
 }
 
-export const qrCodeGenerator = async ( payload: ProfileInput): Promise<string> => {
+export const qrCodeGenerator = async ( payload: ProfileInput): Promise<void> => {
     const qrCodeName= payload.QRCode || payload.businessName+"QR";
     const url = payload.url || `${URI}/profile/${payload.profile_id}`;
     var base64str = base64_encode("./public/images/uploads/"+payload.logo);
     if(payload.bannerImage ){
         await createQR(qrCodeName,url,base64str ,150,50);
-        return qrCodeName;
     }
     else{
         throw new Error('missing parameters')

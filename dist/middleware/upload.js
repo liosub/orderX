@@ -17,7 +17,7 @@ const fileFilter = (req, file, cb) => {
 };
 const storage = multer_1.default.diskStorage({
     destination: function (req, file, cb) {
-        cb(null, "/home/fancypanda/rev/orderX/public/images/uploads");
+        cb(null, "./public/images/uploads");
     },
     filename: function (req, file, cb) {
         cb(null, `${Date.now()}-any-${file.originalname}`);
@@ -30,10 +30,6 @@ exports.upload = (0, multer_1.default)({ storage: storage, fileFilter: fileFilte
     },
     {
         name: 'bannerImage',
-        maxCount: 1
-    },
-    {
-        name: 'QRCode',
         maxCount: 1
     }
 ]);
