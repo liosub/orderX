@@ -1,7 +1,7 @@
 import { Router, Request, Response } from 'express'
 import * as itemsServiceImpl from '../db/services/ItemsServiceImpl'
 import { ItemInput } from '../db/models/Items'
-import  { upload,uploadItmes } from '../middleware/upload';
+import  { uploadItmes } from '../middleware/upload';
 import verifyToken from '../middleware/authMiddleware';
 
 const itemsRouter = Router()
@@ -29,10 +29,9 @@ itemsRouter.get('/menu/:menu_id', verifyToken,async (req: Request, res: Response
 })
 
 itemsRouter.post('/',verifyToken,uploadItmes,async (req: Request, res: Response) => {
-    const payload: ItemInput =req.body;
+    const payload =req.body;
     payload.image = req?.file?.filename || "n/a";
-    const result = await itemsServiceImpl.create(payload)
-
+    const result = await itemsServiceImpl.createMany(payload,req.token._id);
     return res.status(200).send(result)
 })
 

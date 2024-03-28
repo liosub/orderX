@@ -1,10 +1,13 @@
 import { Router, Request, Response} from 'express'
+import dotenv from 'dotenv';
 import * as profileServiceImpl from '../db/services/ProfileServiceImpl'
 import { ProfileInput } from '../db/models/Profile'
 import generateTokens from '../middleware/userToken';
 import verifyToken from '../middleware/authMiddleware';
 import {upload} from '../middleware/upload';
-
+dotenv.config();
+const IMG_URI = process.env.UPLOADS_IMG_URI;
+const QR_URI= process.env.QRCODE_URI;
 const profileRouter = Router()
 
 profileRouter.get('/:id', verifyToken,async (req: Request, res: Response) => {
@@ -16,18 +19,19 @@ profileRouter.get('/:id', verifyToken,async (req: Request, res: Response) => {
 profileRouter.post('/create',verifyToken,upload, async (req: Request, res: Response) => {
     const payload:ProfileInput = req.body
     const files = req.files as {[fieldname :string] :Express.Multer.File[]};
-    payload.logo = files["logo"][0].filename;
-    payload.bannerImage = files["bannerImage"][0].filename;
-    const result = await profileServiceImpl.createNewProfile(req.token._id,payload)
-    if (result) {
-        res.status(201).json({
-        result,
-        token: await generateTokens(result),
-        });
-      } else {
-        res.status(400);
-        throw new Error("Invalid user data");
-      }
+    try{
+        payload.logo = `${IMG_URI}/${files["logo"][0].filename}`;
+        payload.bannerImage = `${IMG_URI}/${files["bannerImage"][0].filename}`;
+        payload.QRCode= `${QR_URI}/${payload.businessName}-QR.png`;
+        const result = await profileServiceImpl.createNewProfile(req.token._id,payload)
+            res.status(201).json({
+            result,
+            token: await generateTokens(result),
+            });
+    }
+    catch(error){
+        res.status(400).json({ error: error });
+    }
 })
 
 

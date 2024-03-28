@@ -13,7 +13,6 @@ export const getById = async (id: number): Promise<MenuOutput> => {
         //@todo throw custom error
         throw new Error('not found')
     }
-
     return menu
 }
 

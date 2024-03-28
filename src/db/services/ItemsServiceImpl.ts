@@ -4,7 +4,9 @@ import * as itemsService from './ItemsService'
 export const create = async (payload: ItemInput): Promise<ItemOutput> => {
     return itemsService.create(payload);
 }
-
+export const createMany = async (payload: any,profile_id:number): Promise<ItemOutput[]> => {
+    return itemsService.createManyItems(payload,profile_id);
+}
 export const update = async (id: number, payload: Partial<ItemInput>): Promise<ItemOutput> => {
     return  itemsService.update(id, payload)
 }

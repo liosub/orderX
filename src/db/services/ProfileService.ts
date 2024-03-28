@@ -69,7 +69,6 @@ export const createNewProfile = async (id: number, payload: Partial<ProfileInput
         throw new Error('not found')
     }
     payload.url = `${URI}/profile/${profile.profile_id}`;
-    payload.QRCode= `${payload.businessName}QR`;
     const updateProfile = await profile.update(payload);
     await qrCodeGenerator(updateProfile);
     return updateProfile

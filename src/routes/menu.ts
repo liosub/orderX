@@ -15,9 +15,14 @@ menuRouter.get('/:id', verifyToken,async (req: Request, res: Response) => {
 })
 
 menuRouter.post('/', verifyToken,async (req: Request, res: Response) => {
-    const payload: MenuInput = req.body
-    const result = await menuServiceImpl.create(payload)
-    return res.status(200).send(result)
+    try{
+        const payload: MenuInput = req.body
+        const result = await menuServiceImpl.create(payload)
+        return res.status(200).send(result)    
+    }
+    catch(error){
+        return res.status(400).json({error:error});    
+    }
 })
 
 menuRouter.put('/:id', verifyToken,async (req: Request, res: Response) => {
