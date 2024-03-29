@@ -39,6 +39,7 @@ const express_1 = require("express");
 const itemsServiceImpl = __importStar(require("../db/services/ItemsServiceImpl"));
 const upload_1 = require("../middleware/upload");
 const authMiddleware_1 = __importDefault(require("../middleware/authMiddleware"));
+const menuServiceImpl = __importStar(require("../db/services/MenuServiceImpl"));
 const itemsRouter = (0, express_1.Router)();
 itemsRouter.get('/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const id = Number(req.params.id);
@@ -49,6 +50,20 @@ itemsRouter.get('/bySection/:section', authMiddleware_1.default, (req, res) => _
     const section = (req.params.section);
     const result = yield itemsServiceImpl.getBySection(section);
     return res.status(200).send(result);
+}));
+itemsRouter.get('/', authMiddleware_1.default, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const menu = yield menuServiceImpl.getByProfileId(req.token._id);
+        console.log(menu);
+        if (!menu) {
+            res.status(400).json({ error: "menu not found" });
+        }
+        const result = yield itemsServiceImpl.getAllByMenuId(menu.menu_id);
+        return res.status(200).send(result);
+    }
+    catch (error) {
+        res.status(400).json({ error: error });
+    }
 }));
 itemsRouter.get('/menu/:menu_id', authMiddleware_1.default, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const id = Number(req.params.menu_id);

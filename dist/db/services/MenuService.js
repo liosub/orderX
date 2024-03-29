@@ -35,36 +35,36 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteById = exports.update = exports.getById = exports.create = exports.createManyItems = void 0;
+exports.deleteById = exports.update = exports.getByProfileId = exports.getById = exports.create = exports.createManyItems = void 0;
 const Items_1 = __importStar(require("../models/Items"));
 const dotenv_1 = __importDefault(require("dotenv"));
 const Menu_1 = __importDefault(require("../models/Menu"));
 dotenv_1.default.config();
 function menuItemsFormatter(payload, images, menu_id) {
-    const itemsX = Array();
+    const itemsX = [];
     for (var i = 0; i < payload.sections.length; i++) {
         let section = JSON.parse(payload.sections[i]);
-        const item = {
-            menu_id: menu_id,
-            sectionTitle: section.title,
-            sectionDescription: section.details,
-            title: "",
-            description: "",
-            price: 0,
-            allergens: "",
-            specialOffer: 0.0,
-            itemState: Items_1.ItemState.AVAILABLE,
-            image: ""
-        };
         section === null || section === void 0 ? void 0 : section.items.forEach((it) => {
+            const item = {
+                menu_id: menu_id,
+                sectionTitle: section.title,
+                sectionDescription: section.details,
+                title: "",
+                description: "",
+                price: 0,
+                allergens: "",
+                specialOffer: 0.0,
+                itemState: Items_1.ItemState.AVAILABLE,
+                image: ""
+            };
             item.title = it.title;
             item.description = it.description;
             item.price = it.price;
             item.image = images["images"][i].path;
             item.allergens = it.allergens;
-            item.itemState = (it.itemState == 1) ? Items_1.ItemState.SOLD_OUT : Items_1.ItemState.AVAILABLE;
+            item.itemState = (it.itemState == 0) ? Items_1.ItemState.SOLD_OUT : Items_1.ItemState.AVAILABLE;
+            itemsX.push(item);
         });
-        itemsX.push(item);
     }
     return itemsX;
 }
@@ -105,6 +105,18 @@ const getById = (id) => __awaiter(void 0, void 0, void 0, function* () {
     return menu;
 });
 exports.getById = getById;
+const getByProfileId = (id) => __awaiter(void 0, void 0, void 0, function* () {
+    const menu = yield Menu_1.default.findOne({
+        where: { profile_id: id }
+    });
+    if (!menu) {
+        //@todo throw custom error
+        throw new Error('not found');
+    }
+    console.log(menu);
+    return menu;
+});
+exports.getByProfileId = getByProfileId;
 const update = (id, payload) => __awaiter(void 0, void 0, void 0, function* () {
     const menu = yield Menu_1.default.findByPk(id);
     if (!menu) {

@@ -16,7 +16,9 @@ export const update = async (id: number, payload: Partial<MenuInput>): Promise<M
 export const getById = async (id: number): Promise<MenuOutput> => {
     return await menuService.getById(id)
 }
-
+export const getByProfileId = async (profile_id: number): Promise<MenuOutput> => {
+    return await menuService.getByProfileId(profile_id)
+}
 export const deleteById = async (id: number): Promise<boolean> => {
     return await menuService.deleteById(id)
 

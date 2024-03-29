@@ -5,6 +5,7 @@ import bodyParser from "body-parser";
 import cors from 'cors';
 import routes from './routes';
 import dbInit from './db/init'
+import path from "path";
 
 dotenv.config();
 const port = process.env.PORT;
@@ -18,7 +19,7 @@ export const get = () => {
   app.use(cors());
   app.options('*', cors());
   app.use(morgan('tiny'))
-  
+  app.use('/public/', express.static('public'));
   app.get('/', async(req: Request, res: Response): Promise<Response> => {
       return res.status(200).send({ message: `Welcome to the cookbook API! \n Endpoints available at http://localhost:${port}/api` })
   })

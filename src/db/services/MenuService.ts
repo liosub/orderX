@@ -4,9 +4,10 @@ import Menu, { MenuInput, MenuOutput } from "../models/Menu";
 dotenv.config();
 
 function menuItemsFormatter(payload:any,images:any,menu_id:number):ItemInput[]{
-    const itemsX:ItemInput[]=Array();
+    const itemsX:ItemInput[]=[];
     for(var i=0;i<payload.sections.length;i++){
         let section=JSON.parse(payload.sections[i]);
+        section?.items.forEach((it:any)=>{
         const item:ItemInput={
             menu_id:menu_id,
             sectionTitle:section.title,
@@ -19,16 +20,14 @@ function menuItemsFormatter(payload:any,images:any,menu_id:number):ItemInput[]{
             itemState:ItemState.AVAILABLE,
             image:""
         };
-        section?.items.forEach((it:any)=>{
             item.title= it.title;
             item.description= it.description;
             item.price= it.price;
             item.image= images["images"][i].path;
             item.allergens= it.allergens;
-            item.itemState=(it.itemState == 1)?ItemState.SOLD_OUT : ItemState.AVAILABLE;
+            item.itemState=(it.itemState == 0)?ItemState.SOLD_OUT : ItemState.AVAILABLE;
+            itemsX.push(item);
         });
-        
-        itemsX.push(item);
     }
     return itemsX;
 }
@@ -65,6 +64,18 @@ export const create = async (payload: any,profile_id:number): Promise<MenuOutput
 
 export const getById = async (id: number): Promise<MenuOutput> => {
     const menu = await Menu.findByPk(id)
+
+    if (!menu) {
+        //@todo throw custom error
+        throw new Error('not found')
+    }
+    return menu
+}
+
+export const getByProfileId = async (id: number): Promise<MenuOutput> => {
+    const menu = await Menu.findOne({
+        where: {profile_id:id}
+    })
 
     if (!menu) {
         //@todo throw custom error

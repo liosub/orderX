@@ -31,6 +31,7 @@ const get = () => {
     app.use((0, cors_1.default)());
     app.options('*', (0, cors_1.default)());
     app.use((0, morgan_1.default)('tiny'));
+    app.use('/public/', express_1.default.static('public'));
     app.get('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         return res.status(200).send({ message: `Welcome to the cookbook API! \n Endpoints available at http://localhost:${port}/api` });
     }));

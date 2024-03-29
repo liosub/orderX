@@ -32,7 +32,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteById = exports.getById = exports.update = exports.createMany = exports.create = void 0;
+exports.deleteById = exports.getByProfileId = exports.getById = exports.update = exports.createMany = exports.create = void 0;
 const menuService = __importStar(require("./MenuService"));
 const create = (payload, profile_id) => __awaiter(void 0, void 0, void 0, function* () {
     return yield menuService.create(payload, profile_id);
@@ -50,6 +50,10 @@ const getById = (id) => __awaiter(void 0, void 0, void 0, function* () {
     return yield menuService.getById(id);
 });
 exports.getById = getById;
+const getByProfileId = (profile_id) => __awaiter(void 0, void 0, void 0, function* () {
+    return yield menuService.getByProfileId(profile_id);
+});
+exports.getByProfileId = getByProfileId;
 const deleteById = (id) => __awaiter(void 0, void 0, void 0, function* () {
     return yield menuService.deleteById(id);
 });
