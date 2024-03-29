@@ -14,6 +14,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getBySection = exports.getAll = exports.deleteById = exports.update = exports.getById = exports.create = void 0;
 const Items_1 = __importDefault(require("../models/Items"));
+const dotenv_1 = __importDefault(require("dotenv"));
+dotenv_1.default.config();
 const create = (payload) => __awaiter(void 0, void 0, void 0, function* () {
     const item = yield Items_1.default.create(payload);
     return item;

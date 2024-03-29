@@ -20,6 +20,15 @@ const storage = multer.diskStorage({
     
   },
 });
+const storageX = multer.diskStorage({
+  destination: function(req, file, cb) {
+    cb(null, "./public/images/items");
+  },
+  filename: function(req, file, cb) {
+    cb(null, `${Date.now()}-any-${file.originalname}`);
+    
+  },
+});
 export const upload = multer({storage: storage, fileFilter : fileFilter}).fields([
   { 
     name: 'logo', 
@@ -30,11 +39,18 @@ export const upload = multer({storage: storage, fileFilter : fileFilter}).fields
     maxCount: 1 
   }
 ]);
-
-
-export const uploadItmes = multer({storage: storage, fileFilter : fileFilter}).fields([
+export const uploadLogo = multer({storage: storage, fileFilter : fileFilter}).fields([
   { 
-    name: 'image', 
+    name: 'logo', 
     maxCount: 1 
+  }
+])
+
+
+
+export const uploadItmes = multer({storage: storageX, fileFilter : fileFilter}).fields([
+  { 
+    name: 'images', 
+    maxCount: 5 
   }
 ]);

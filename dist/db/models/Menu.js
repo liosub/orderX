@@ -15,6 +15,12 @@ exports.MENU_MODEL = {
         unique: true,
         primaryKey: true
     },
+    menuTitle: {
+        type: sequelize_1.DataTypes.STRING,
+    },
+    menuDetails: {
+        type: sequelize_1.DataTypes.STRING,
+    },
     font: {
         type: sequelize_1.DataTypes.STRING,
     },

@@ -7,9 +7,9 @@ interface ProfileAttributes{
     email:string;
     password:string;
     businessName:string;
-    tag:string;
+    about:string;
     logo?:string;
-    bannerImage?:string;
+    tbc?:string;
     url?:string;
     QRCode:string;
     createdAt?: Date;
@@ -41,13 +41,13 @@ export const PROFILE_MODEL: ModelAttributes<Profile> = {
         type: DataTypes.STRING,
         unique: true
       },
-      tag: {
+      about: {
         type: DataTypes.TEXT
       },
       logo: {
         type: DataTypes.STRING,
       },
-      bannerImage: {
+      tbc: {
         type: DataTypes.STRING,
       },
       QRCode: {
@@ -71,9 +71,9 @@ export default class Profile extends Model<ProfileAttributes,ProfileInput> imple
     public email!:string;
     public password!:string;
     public businessName!:string;
-    public tag!:string;
+    public about!:string;
     public logo!:string;
-    public bannerImage!:string;
+    public tbc!:string;
     public url!:string;
     public QRCode!:string;
     readonly createdAt!: Date;

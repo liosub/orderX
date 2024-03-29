@@ -36,31 +36,57 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
+const dotenv_1 = __importDefault(require("dotenv"));
 const profileServiceImpl = __importStar(require("../db/services/ProfileServiceImpl"));
 const userToken_1 = __importDefault(require("../middleware/userToken"));
 const authMiddleware_1 = __importDefault(require("../middleware/authMiddleware"));
 const upload_1 = require("../middleware/upload");
+dotenv_1.default.config();
+const IMG_URI = process.env.UPLOADS_IMG_URI;
+const QR_URI = process.env.QRCODE_URI;
 const profileRouter = (0, express_1.Router)();
+profileRouter.get('/me', authMiddleware_1.default, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const id = Number(req.token._id);
+    console.log(id);
+    const result = yield profileServiceImpl.getById(id);
+    return res.status(200).send(result);
+}));
 profileRouter.get('/:id', authMiddleware_1.default, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const id = Number(req.params.id);
     const result = yield profileServiceImpl.getById(id);
     return res.status(200).send(result);
 }));
-profileRouter.post('/create', authMiddleware_1.default, upload_1.upload, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+profileRouter.post('/createM', authMiddleware_1.default, upload_1.upload, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const payload = req.body;
     const files = req.files;
-    payload.logo = files["logo"][0].filename;
-    payload.bannerImage = files["bannerImage"][0].filename;
-    const result = yield profileServiceImpl.createNewProfile(req.token._id, payload);
-    if (result) {
+    try {
+        payload.logo = `${IMG_URI}/${files["logo"][0].filename}`;
+        // payload.bannerImage = `${IMG_URI}/${files["bannerImage"][0].filename}`;
+        payload.QRCode = `${QR_URI}/${payload.businessName}-QR.png`;
+        const result = yield profileServiceImpl.createNewProfile(req.token._id, payload);
         res.status(201).json({
             result,
             token: yield (0, userToken_1.default)(result),
         });
     }
-    else {
-        res.status(400);
-        throw new Error("Invalid user data");
+    catch (error) {
+        res.status(400).json({ error: error });
+    }
+}));
+profileRouter.post('/create', authMiddleware_1.default, upload_1.uploadLogo, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const payload = req.body;
+    const files = req.files;
+    try {
+        payload.logo = `${files["logo"][0].path}`;
+        payload.QRCode = `${payload.businessName}-QR.png`;
+        const result = yield profileServiceImpl.createNewProfile(req.token._id, payload);
+        res.status(201).json({
+            result,
+            token: yield (0, userToken_1.default)(result),
+        });
+    }
+    catch (error) {
+        res.status(400).json({ error: error });
     }
 }));
 profileRouter.put('/:id', authMiddleware_1.default, (req, res) => __awaiter(void 0, void 0, void 0, function* () {

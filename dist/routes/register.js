@@ -41,33 +41,36 @@ const bcrypt_1 = __importDefault(require("bcrypt"));
 const userToken_1 = __importDefault(require("../middleware/userToken"));
 const registerRouter = (0, express_1.Router)();
 registerRouter.post('/signup', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const payload = req.body;
-    const result = yield profileServiceImpl.create(payload);
-    if (result) {
+    try {
+        const payload = req.body;
+        const result = yield profileServiceImpl.create(payload);
         res.status(201).json({
             result,
             token: yield (0, userToken_1.default)(result),
         });
     }
-    else {
-        res.status(400);
-        throw new Error("Invalid user data");
+    catch (error) {
+        res.status(400).json({ error: error });
     }
 }));
 registerRouter.post('/signin', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const payload = req.body;
-    const result = yield profileServiceImpl.getByEmail(payload.email);
-    const passwordMatch = (yield bcrypt_1.default.compare(payload.password, result.password));
-    if (result && passwordMatch) {
-        res.json({
-            businessName: result.businessName,
-            email: result.email,
-            token: yield (0, userToken_1.default)(result),
-        });
+    try {
+        const result = yield profileServiceImpl.getByEmail(payload.email);
+        const passwordMatch = (yield bcrypt_1.default.compare(payload.password, result.password));
+        if (result && passwordMatch) {
+            res.json({
+                businessName: result.businessName,
+                email: result.email,
+                token: yield (0, userToken_1.default)(result),
+            });
+        }
+        else {
+            res.status(400).json({ error: "Invalid credentials" });
+        }
     }
-    else {
-        res.status(400);
-        throw new Error("Invalid credentials");
+    catch (error) {
+        res.status(400).json({ error: error });
     }
 }));
 exports.default = registerRouter;

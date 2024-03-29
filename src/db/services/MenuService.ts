@@ -1,9 +1,66 @@
-import Menu, { MenuInput, MenuOutput } from "../models/Menu"
+import Items, { ItemInput, ItemOutput ,ItemState} from "../models/Items"
+import dotenv from 'dotenv';
+import Menu, { MenuInput, MenuOutput } from "../models/Menu";
+dotenv.config();
 
+function menuItemsFormatter(payload:any,images:any,menu_id:number):ItemInput[]{
+    const itemsX:ItemInput[]=Array();
+    for(var i=0;i<payload.sections.length;i++){
+        let section=JSON.parse(payload.sections[i]);
+        const item:ItemInput={
+            menu_id:menu_id,
+            sectionTitle:section.title,
+            sectionDescription:section.details,
+            title:"",
+            description:"",
+            price:0,
+            allergens:"",
+            specialOffer:0.0,
+            itemState:ItemState.AVAILABLE,
+            image:""
+        };
+        section?.items.forEach((it:any)=>{
+            item.title= it.title;
+            item.description= it.description;
+            item.price= it.price;
+            item.image= images["images"][i].path;
+            item.allergens= it.allergens;
+            item.itemState=(it.itemState == 1)?ItemState.SOLD_OUT : ItemState.AVAILABLE;
+        });
+        
+        itemsX.push(item);
+    }
+    return itemsX;
+}
 
+export const createManyItems = async (payload: any,images:any,menu_id:number): Promise<ItemOutput[]> => {
+    const newItems= menuItemsFormatter(payload,images,menu_id);
+    const item = await Items.bulkCreate(newItems as ItemInput[]);
+    return item;
+}
 
-export const create = async (payload: MenuInput): Promise<MenuOutput> => {
-    return await Menu.create(payload)
+export const create = async (payload: any,profile_id:number): Promise<MenuOutput> => {
+    const menu:MenuInput={
+        menuTitle:"",
+        menuDetails:"",
+        accent:"",
+        font:"",
+        profile_id:0
+    };
+    menu.menuTitle=payload?.menu_title;
+    menu.menuDetails= payload?.menu_details;
+    menu.accent=payload?.accent;
+    menu.font=payload?.font;
+    menu.profile_id= profile_id;
+    const [newMenu] = await Menu.findOrCreate({
+        where: {
+            menuTitle: menu.menuTitle
+        },
+        defaults: menu as MenuInput
+    });
+
+    
+    return newMenu;
 }
 
 export const getById = async (id: number): Promise<MenuOutput> => {

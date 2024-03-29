@@ -27,13 +27,14 @@ itemsRouter.get('/menu/:menu_id', verifyToken,async (req: Request, res: Response
     const result = await itemsServiceImpl.getAllByMenuId(id)
     return res.status(200).send(result)
 })
-
 itemsRouter.post('/',verifyToken,uploadItmes,async (req: Request, res: Response) => {
     const payload =req.body;
-    payload.image = req?.file?.filename || "n/a";
-    const result = await itemsServiceImpl.createMany(payload,req.token._id);
+    payload.images = req?.file?.filename || "n/a";
+    const result = await itemsServiceImpl.create(payload);
     return res.status(200).send(result)
 })
+
+
 
 itemsRouter.post('/section/:id',verifyToken,uploadItmes, async (req: Request, res: Response) => {
     const id = Number(req.params.id)

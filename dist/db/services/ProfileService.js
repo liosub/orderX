@@ -19,6 +19,7 @@ const bcrypt_1 = __importDefault(require("bcrypt"));
 const qrGenerator_1 = require("../../middleware/qrGenerator");
 dotenv_1.default.config();
 const URI = process.env.URI;
+const QR_URI = process.env.QRCODE_URI;
 const create = (payload) => __awaiter(void 0, void 0, void 0, function* () {
     const encryptedUserPassword = yield bcrypt_1.default.hash(payload.password, 10);
     payload.password = encryptedUserPassword;
@@ -75,18 +76,18 @@ const createNewProfile = (id, payload) => __awaiter(void 0, void 0, void 0, func
         // @todo throw custom error
         throw new Error('not found');
     }
+    yield (0, exports.qrCodeGenerator)(payload);
     payload.url = `${URI}/profile/${profile.profile_id}`;
-    payload.QRCode = `${payload.businessName}QR`;
+    payload.QRCode = `${QR_URI}/${payload.QRCode}`;
     const updateProfile = yield profile.update(payload);
-    yield (0, exports.qrCodeGenerator)(updateProfile);
     return updateProfile;
 });
 exports.createNewProfile = createNewProfile;
 const qrCodeGenerator = (payload) => __awaiter(void 0, void 0, void 0, function* () {
     const qrCodeName = payload.QRCode || payload.businessName + "QR";
     const url = payload.url || `${URI}/profile/${payload.profile_id}`;
-    var base64str = (0, qrGenerator_1.base64_encode)("./public/images/uploads/" + payload.logo);
-    if (payload.bannerImage) {
+    var base64str = (0, qrGenerator_1.base64_encode)(payload.logo);
+    if (payload.logo) {
         yield (0, qrGenerator_1.createQR)(qrCodeName, url, base64str, 150, 50);
     }
     else {

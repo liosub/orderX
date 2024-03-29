@@ -6,6 +6,8 @@ import Order from './Order';
 
 interface MenuAttributes{
     menu_id:number;
+    menuTitle:string;
+    menuDetails:string;
     font:string;
     accent:string;
     profile_id?:number;
@@ -25,6 +27,13 @@ export const MENU_MODEL: ModelAttributes<Menu> = {
         allowNull: false,
         unique: true,
         primaryKey: true
+      },
+      menuTitle: {
+        type: DataTypes.STRING,
+      },
+ 
+      menuDetails: {
+        type: DataTypes.STRING,
       },
       font: {
         type: DataTypes.STRING,
@@ -53,6 +62,8 @@ export const MENU_MODEL: ModelAttributes<Menu> = {
     }
 export default class Menu extends Model<MenuAttributes,MenuInput> implements MenuAttributes{
     public menu_id!:number;
+    public menuTitle!:string;
+    public menuDetails!:string;
     public font!:string;
     public profile_id!:number;
     public accent!:string;

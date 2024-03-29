@@ -7,7 +7,7 @@ import registerRouter from './register';
 
 
 const router = Router()
-router.use('/profile',registerRouter);
+router.use('/',registerRouter);
 router.use('/profile',profileRouter);
 router.use('/menu',menuRouter);
 router.use('/items',itemsRouter);

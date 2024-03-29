@@ -17,7 +17,12 @@ module.exports = {
         unique: true,
         primaryKey: true
       },
-
+      menuTitle: {
+        type: Sequelize.STRING,
+      },
+      menuDetails: {
+        type: Sequelize.STRING,
+      },
       font: {
         type: Sequelize.STRING,
       },

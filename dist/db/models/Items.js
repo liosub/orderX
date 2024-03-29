@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ITEM_MODEL = void 0;
+exports.ITEM_MODEL = exports.ItemState = void 0;
 const sequelize_1 = require("sequelize");
 const Order_1 = __importDefault(require("./Order"));
 const Menu_1 = __importDefault(require("./Menu"));
@@ -11,8 +11,8 @@ const OrderItems_1 = __importDefault(require("./OrderItems"));
 var ItemState;
 (function (ItemState) {
     ItemState[ItemState["SOLD_OUT"] = 0] = "SOLD_OUT";
-    ItemState[ItemState["NOT_AVAILABLE"] = 1] = "NOT_AVAILABLE";
-})(ItemState || (ItemState = {}));
+    ItemState[ItemState["AVAILABLE"] = 1] = "AVAILABLE";
+})(ItemState || (exports.ItemState = ItemState = {}));
 exports.ITEM_MODEL = {
     item_id: {
         type: sequelize_1.DataTypes.INTEGER,
@@ -47,7 +47,7 @@ exports.ITEM_MODEL = {
     },
     itemState: {
         type: sequelize_1.DataTypes.ENUM({
-            values: ['SOLD_OUT', 'NOT_AVAILABLE']
+            values: ['SOLD_OUT', 'AVAILABLE']
         }),
     },
     menu_id: {

@@ -56,7 +56,7 @@ function createQR(businessName, dataForQRcode, center_image, width, cwidth) {
         const center = (width - cwidth * 1.40) / 2;
         ctx.drawImage(img, center, center, cwidth, cwidth);
         const buffer = canvas.toBuffer("image/png");
-        yield fs_1.default.writeFileSync(`./public/images/QRcodes/${businessName}.png`, buffer);
+        yield fs_1.default.writeFileSync(`./public/images/QRcodes/${businessName}-QR.png`, buffer);
     });
 }
 exports.createQR = createQR;

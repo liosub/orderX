@@ -30,13 +30,13 @@ module.exports = {
         type: Sequelize.STRING,
         unique: true
       },
-      tag: {
+      about: {
         type: Sequelize.TEXT
       },
       logo: {
         type: Sequelize.STRING,
       },
-      bannerImage: {
+      tbc: {
         type: Sequelize.STRING,
       },
       QRCode: {

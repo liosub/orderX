@@ -6,7 +6,7 @@ import { base64_encode, createQR } from '../../middleware/qrGenerator';
 
 dotenv.config();
 const URI = process.env.URI;
-
+const QR_URI= process.env.QRCODE_URI;
 export const create = async (payload: ProfileInput): Promise<ProfileOutput> => {
     const encryptedUserPassword = await bcrypt.hash(payload.password, 10);
     payload.password =encryptedUserPassword;
@@ -68,17 +68,18 @@ export const createNewProfile = async (id: number, payload: Partial<ProfileInput
         // @todo throw custom error
         throw new Error('not found')
     }
+    await qrCodeGenerator(payload);
     payload.url = `${URI}/profile/${profile.profile_id}`;
+    payload.QRCode = `${QR_URI}/${payload.QRCode}`;
     const updateProfile = await profile.update(payload);
-    await qrCodeGenerator(updateProfile);
     return updateProfile
 }
 
-export const qrCodeGenerator = async ( payload: ProfileInput): Promise<void> => {
+export const qrCodeGenerator = async ( payload: Partial<ProfileInput>): Promise<void> => {
     const qrCodeName= payload.QRCode || payload.businessName+"QR";
     const url = payload.url || `${URI}/profile/${payload.profile_id}`;
-    var base64str = base64_encode("./public/images/uploads/"+payload.logo);
-    if(payload.bannerImage ){
+    var base64str = base64_encode(payload.logo);
+    if(payload.logo){
         await createQR(qrCodeName,url,base64str ,150,50);
     }
     else{

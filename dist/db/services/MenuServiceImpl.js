@@ -32,12 +32,16 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteById = exports.getById = exports.update = exports.create = void 0;
+exports.deleteById = exports.getById = exports.update = exports.createMany = exports.create = void 0;
 const menuService = __importStar(require("./MenuService"));
-const create = (payload) => __awaiter(void 0, void 0, void 0, function* () {
-    return yield menuService.create(payload);
+const create = (payload, profile_id) => __awaiter(void 0, void 0, void 0, function* () {
+    return yield menuService.create(payload, profile_id);
 });
 exports.create = create;
+const createMany = (payload, images, menu_id) => __awaiter(void 0, void 0, void 0, function* () {
+    return menuService.createManyItems(payload, images, menu_id);
+});
+exports.createMany = createMany;
 const update = (id, payload) => __awaiter(void 0, void 0, void 0, function* () {
     return yield menuService.update(id, payload);
 });

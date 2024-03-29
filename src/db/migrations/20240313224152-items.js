@@ -43,7 +43,7 @@ module.exports = {
       },
       itemState: {
         type: Sequelize.ENUM({
-          values: ['SOLD_OUT','NOT_AVAILABLE']
+          values: ['SOLD_OUT','AVAILABLE']
         }),
       },
       menu_id: {

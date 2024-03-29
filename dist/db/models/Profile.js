@@ -26,13 +26,13 @@ exports.PROFILE_MODEL = {
         type: sequelize_1.DataTypes.STRING,
         unique: true
     },
-    tag: {
+    about: {
         type: sequelize_1.DataTypes.TEXT
     },
     logo: {
         type: sequelize_1.DataTypes.STRING,
     },
-    bannerImage: {
+    tbc: {
         type: sequelize_1.DataTypes.STRING,
     },
     QRCode: {

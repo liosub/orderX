@@ -58,7 +58,7 @@ itemsRouter.get('/menu/:menu_id', authMiddleware_1.default, (req, res) => __awai
 itemsRouter.post('/', authMiddleware_1.default, upload_1.uploadItmes, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     var _a;
     const payload = req.body;
-    payload.image = ((_a = req === null || req === void 0 ? void 0 : req.file) === null || _a === void 0 ? void 0 : _a.filename) || "n/a";
+    payload.images = ((_a = req === null || req === void 0 ? void 0 : req.file) === null || _a === void 0 ? void 0 : _a.filename) || "n/a";
     const result = yield itemsServiceImpl.create(payload);
     return res.status(200).send(result);
 }));

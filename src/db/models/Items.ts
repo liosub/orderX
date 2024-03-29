@@ -3,8 +3,8 @@ import Order from './Order';
 import Menu from './Menu';
 import OrderItems from './OrderItems';
 
-enum ItemState{
-    SOLD_OUT,NOT_AVAILABLE
+export enum ItemState{
+    SOLD_OUT,AVAILABLE
 }
 interface ItemAttributes{
     item_id:number;
@@ -26,7 +26,6 @@ interface ItemAttributes{
 
 export interface ItemInput extends Optional<ItemAttributes,'item_id'>{}
 export interface ItemOutput extends Required<ItemAttributes> {}
-
 
 export const ITEM_MODEL: ModelAttributes<Items> = {
     item_id: {
@@ -62,7 +61,7 @@ export const ITEM_MODEL: ModelAttributes<Items> = {
       },
       itemState: {
         type: DataTypes.ENUM({
-          values: ['SOLD_OUT','NOT_AVAILABLE']
+          values: ['SOLD_OUT','AVAILABLE']
         }),
       },
       menu_id: {

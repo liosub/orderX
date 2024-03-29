@@ -4,11 +4,19 @@ import * as profileServiceImpl from '../db/services/ProfileServiceImpl'
 import { ProfileInput } from '../db/models/Profile'
 import generateTokens from '../middleware/userToken';
 import verifyToken from '../middleware/authMiddleware';
-import {upload} from '../middleware/upload';
+import {upload, uploadLogo} from '../middleware/upload';
 dotenv.config();
 const IMG_URI = process.env.UPLOADS_IMG_URI;
 const QR_URI= process.env.QRCODE_URI;
 const profileRouter = Router()
+
+
+profileRouter.get('/me', verifyToken,async (req: Request, res: Response) => {
+    const id = Number(req.token._id)
+    console.log(id)
+    const result = await profileServiceImpl.getById(id)
+    return res.status(200).send(result)
+})
 
 profileRouter.get('/:id', verifyToken,async (req: Request, res: Response) => {
     const id = Number(req.params.id)
@@ -16,12 +24,13 @@ profileRouter.get('/:id', verifyToken,async (req: Request, res: Response) => {
     return res.status(200).send(result)
 })
 
-profileRouter.post('/create',verifyToken,upload, async (req: Request, res: Response) => {
+
+profileRouter.post('/createM',verifyToken,upload, async (req: Request, res: Response) => {
     const payload:ProfileInput = req.body
     const files = req.files as {[fieldname :string] :Express.Multer.File[]};
     try{
         payload.logo = `${IMG_URI}/${files["logo"][0].filename}`;
-        payload.bannerImage = `${IMG_URI}/${files["bannerImage"][0].filename}`;
+        // payload.bannerImage = `${IMG_URI}/${files["bannerImage"][0].filename}`;
         payload.QRCode= `${QR_URI}/${payload.businessName}-QR.png`;
         const result = await profileServiceImpl.createNewProfile(req.token._id,payload)
             res.status(201).json({
@@ -34,6 +43,22 @@ profileRouter.post('/create',verifyToken,upload, async (req: Request, res: Respo
     }
 })
 
+profileRouter.post('/create',verifyToken,uploadLogo, async (req: Request, res: Response) => {
+    const payload:ProfileInput = req.body;
+    const files = req.files as {[fieldname :string] :Express.Multer.File[]};
+    try{
+        payload.logo = `${files["logo"][0].path}`;
+        payload.QRCode= `${payload.businessName}-QR.png`;
+        const result = await profileServiceImpl.createNewProfile(req.token._id,payload)
+            res.status(201).json({
+            result,
+            token: await generateTokens(result),
+            });
+    }
+    catch(error){
+        res.status(400).json({ error: error });
+    }
+})
 
 profileRouter.put('/:id', verifyToken,async (req: Request, res: Response) => {
     const id = Number(req.params.id)
