@@ -45,6 +45,7 @@ function menuItemsFormatter(payload, images, menu_id) {
     for (var i = 0; i < payload.sections.length; i++) {
         let section = JSON.parse(payload.sections[i]);
         section === null || section === void 0 ? void 0 : section.items.forEach((it) => {
+            var _a;
             const item = {
                 menu_id: menu_id,
                 sectionTitle: section.title,
@@ -57,10 +58,13 @@ function menuItemsFormatter(payload, images, menu_id) {
                 itemState: Items_1.ItemState.AVAILABLE,
                 image: ""
             };
+            if (it.item_id) {
+                item.item_id = it.item_id;
+            }
             item.title = it.title;
             item.description = it.description;
             item.price = it.price;
-            item.image = images["images"][i].path;
+            item.image = (it.item_image) ? it.item_image : (_a = images["images"][i]) === null || _a === void 0 ? void 0 : _a.path;
             item.allergens = it.allergens;
             item.itemState = (it.itemState == 0) ? Items_1.ItemState.SOLD_OUT : Items_1.ItemState.AVAILABLE;
             itemsX.push(item);
@@ -70,7 +74,7 @@ function menuItemsFormatter(payload, images, menu_id) {
 }
 const createManyItems = (payload, images, menu_id) => __awaiter(void 0, void 0, void 0, function* () {
     const newItems = menuItemsFormatter(payload, images, menu_id);
-    const item = yield Items_1.default.bulkCreate(newItems);
+    const item = yield Items_1.default.bulkCreate(newItems, { updateOnDuplicate: ["item_id"] });
     return item;
 });
 exports.createManyItems = createManyItems;
@@ -113,7 +117,6 @@ const getByProfileId = (id) => __awaiter(void 0, void 0, void 0, function* () {
         //@todo throw custom error
         throw new Error('not found');
     }
-    console.log(menu);
     return menu;
 });
 exports.getByProfileId = getByProfileId;

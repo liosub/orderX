@@ -43,7 +43,7 @@ export const getAll = async (menu_id:number): Promise<ItemOutput[]> => {
     return  Items.findAll({
         where: {
             menu_id:menu_id
-        },
+        }
     })
 }
 

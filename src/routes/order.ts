@@ -27,11 +27,14 @@ orderRouter.get('/groupBy/:id', verifyToken,async (req: Request, res: Response) 
     return res.status(200).send(result)
 })
 orderRouter.post('/', verifyToken,async (req: Request, res: Response) => {
-    const payload: OrderInput = req.body
-
-    const result = await orderServiceImpl.create(payload)
-
-    return res.status(200).send(result)
+    try{
+        const payload: OrderInput = req.body
+        const result = await orderServiceImpl.create(payload)
+        return res.status(200).send(result)    
+    }
+    catch(error){
+        res.status(400).json({ error: error });
+    }
 })
 
 orderRouter.put('/:id', verifyToken,async (req: Request, res: Response) => {

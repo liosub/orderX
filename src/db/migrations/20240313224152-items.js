@@ -42,9 +42,8 @@ module.exports = {
         type: Sequelize.DOUBLE,
       },
       itemState: {
-        type: Sequelize.ENUM({
-          values: ['SOLD_OUT','AVAILABLE']
-        }),
+        type: Sequelize.INTEGER,
+        defaultValue:0
       },
       menu_id: {
         type: Sequelize.INTEGER,

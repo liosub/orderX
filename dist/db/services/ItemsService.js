@@ -50,7 +50,7 @@ const getAll = (menu_id) => __awaiter(void 0, void 0, void 0, function* () {
     return Items_1.default.findAll({
         where: {
             menu_id: menu_id
-        },
+        }
     });
 });
 exports.getAll = getAll;

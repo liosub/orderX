@@ -36,18 +36,33 @@ const express_1 = require("express");
 const orderItemServiceImpl = __importStar(require("../db/services/OrderItemService"));
 const orderItemRouter = (0, express_1.Router)();
 orderItemRouter.get('/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const id = Number(req.params.id);
-    const result = yield orderItemServiceImpl.getById(id);
-    return res.status(200).send(result);
+    try {
+        const id = Number(req.params.id);
+        const result = yield orderItemServiceImpl.getById(id);
+        return res.status(200).send(result);
+    }
+    catch (error) {
+        res.status(400).json({ error: error });
+    }
 }));
 orderItemRouter.post('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const payload = req.body;
-    const result = yield orderItemServiceImpl.create(payload);
-    return res.status(200).send(result);
+    try {
+        const payload = req.body;
+        const result = yield orderItemServiceImpl.create(payload);
+        return res.status(200).send(result);
+    }
+    catch (error) {
+        res.status(400).json({ error: error });
+    }
 }));
 orderItemRouter.post('/many/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const payload = req.body;
-    const result = yield orderItemServiceImpl.createMany(payload);
-    return res.status(200).send(result);
+    try {
+        const payload = req.body;
+        const result = yield orderItemServiceImpl.createMany(payload);
+        return res.status(200).send(result);
+    }
+    catch (error) {
+        res.status(400).json({ error: error });
+    }
 }));
 exports.default = orderItemRouter;

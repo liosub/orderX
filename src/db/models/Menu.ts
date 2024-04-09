@@ -2,6 +2,7 @@ import { DataTypes, Model, Optional ,Sequelize,ModelAttributes} from 'sequelize'
 import Profile from './Profile';
 import Item from './Items';
 import Order from './Order';
+import Items from './Items';
 
 
 interface MenuAttributes{
@@ -90,5 +91,8 @@ static associate(_models: Model[]) {
     Menu.hasMany(Order,{
       foreignKey :'menu_id'
   })
+  Menu.hasMany(Items,{
+    foreignKey :'item_id'
+});
 }
 }

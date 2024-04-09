@@ -13,6 +13,12 @@ exports.ORDER_ITEM_MODEL = {
     },
     item_id: {
         type: sequelize_1.DataTypes.INTEGER,
+    },
+    quantity: {
+        type: sequelize_1.DataTypes.INTEGER,
+    },
+    price: {
+        type: sequelize_1.DataTypes.BIGINT,
     }
 };
 class OrderItems extends sequelize_1.Model {

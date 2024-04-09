@@ -56,9 +56,14 @@ orderRouter.get('/groupBy/:id', authMiddleware_1.default, (req, res) => __awaite
     return res.status(200).send(result);
 }));
 orderRouter.post('/', authMiddleware_1.default, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const payload = req.body;
-    const result = yield orderServiceImpl.create(payload);
-    return res.status(200).send(result);
+    try {
+        const payload = req.body;
+        const result = yield orderServiceImpl.create(payload);
+        return res.status(200).send(result);
+    }
+    catch (error) {
+        res.status(400).json({ error: error });
+    }
 }));
 orderRouter.put('/:id', authMiddleware_1.default, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const id = Number(req.params.id);

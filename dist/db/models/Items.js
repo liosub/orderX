@@ -46,9 +46,7 @@ exports.ITEM_MODEL = {
         type: sequelize_1.DataTypes.DOUBLE,
     },
     itemState: {
-        type: sequelize_1.DataTypes.ENUM({
-            values: ['SOLD_OUT', 'AVAILABLE']
-        }),
+        type: sequelize_1.DataTypes.INTEGER,
     },
     menu_id: {
         type: sequelize_1.DataTypes.INTEGER,
@@ -79,9 +77,7 @@ class Items extends sequelize_1.Model {
     }
     static associate(_models) {
         Items.belongsToMany(Order_1.default, { through: OrderItems_1.default, as: 'order', foreignKey: "order_id" });
-        Menu_1.default.hasMany(Items, {
-            foreignKey: 'menu_id'
-        });
+        Items.belongsTo(Menu_1.default, { foreignKey: "menu_id" });
     }
 }
 exports.default = Items;

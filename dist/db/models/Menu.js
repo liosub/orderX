@@ -7,6 +7,7 @@ exports.MENU_MODEL = void 0;
 const sequelize_1 = require("sequelize");
 const Profile_1 = __importDefault(require("./Profile"));
 const Order_1 = __importDefault(require("./Order"));
+const Items_1 = __importDefault(require("./Items"));
 exports.MENU_MODEL = {
     menu_id: {
         type: sequelize_1.DataTypes.INTEGER,
@@ -61,6 +62,9 @@ class Menu extends sequelize_1.Model {
         });
         Menu.hasMany(Order_1.default, {
             foreignKey: 'menu_id'
+        });
+        Menu.hasMany(Items_1.default, {
+            foreignKey: 'item_id'
         });
     }
 }

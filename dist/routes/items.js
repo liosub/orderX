@@ -54,7 +54,6 @@ itemsRouter.get('/bySection/:section', authMiddleware_1.default, (req, res) => _
 itemsRouter.get('/', authMiddleware_1.default, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const menu = yield menuServiceImpl.getByProfileId(req.token._id);
-        console.log(menu);
         if (!menu) {
             res.status(400).json({ error: "menu not found" });
         }

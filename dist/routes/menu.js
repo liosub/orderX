@@ -40,15 +40,20 @@ const menuServiceImpl = __importStar(require("../db/services/MenuServiceImpl"));
 const authMiddleware_1 = __importDefault(require("../middleware/authMiddleware"));
 const upload_1 = require("../middleware/upload");
 const menuRouter = (0, express_1.Router)();
-menuRouter.get('/:id', authMiddleware_1.default, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const id = Number(req.params.id);
-    const result = yield menuServiceImpl.getById(id);
-    return res.status(200).send(result);
+menuRouter.get('/', authMiddleware_1.default, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const result = yield menuServiceImpl.getByProfileId(req.token._id);
+        return res.status(200).send(result);
+    }
+    catch (error) {
+        return res.status(400).json({ error: error });
+    }
 }));
 menuRouter.post('/createMany', authMiddleware_1.default, upload_1.uploadItmes, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const images = req.files;
         const payload = req.body;
+        console.log(payload, images);
         const savedMenu = yield menuServiceImpl.create(payload, req.token._id);
         const result = yield menuServiceImpl.createMany(payload, images, savedMenu.menu_id);
         return res.status(200).send(result);
@@ -74,10 +79,15 @@ menuRouter.put('/:id', authMiddleware_1.default, (req, res) => __awaiter(void 0,
     return res.status(200).send(result);
 }));
 menuRouter.delete('/:id', authMiddleware_1.default, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const id = Number(req.params.id);
-    const result = yield menuServiceImpl.deleteById(id);
-    return res.status(200).send({
-        success: result
-    });
+    try {
+        const id = Number(req.params.id);
+        const result = yield menuServiceImpl.deleteById(id);
+        return res.status(200).send({
+            success: result
+        });
+    }
+    catch (error) {
+        return res.status(400).json({ error: error });
+    }
 }));
 exports.default = menuRouter;

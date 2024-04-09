@@ -20,10 +20,13 @@ function menuItemsFormatter(payload:any,images:any,menu_id:number):ItemInput[]{
             itemState:ItemState.AVAILABLE,
             image:""
         };
+            if(it.item_id){
+                item.item_id= it.item_id;
+            }
             item.title= it.title;
             item.description= it.description;
             item.price= it.price;
-            item.image= images["images"][i].path;
+            item.image=(it.item_image)? it.item_image: images["images"][i]?.path;
             item.allergens= it.allergens;
             item.itemState=(it.itemState == 0)?ItemState.SOLD_OUT : ItemState.AVAILABLE;
             itemsX.push(item);
@@ -34,8 +37,12 @@ function menuItemsFormatter(payload:any,images:any,menu_id:number):ItemInput[]{
 
 export const createManyItems = async (payload: any,images:any,menu_id:number): Promise<ItemOutput[]> => {
     const newItems= menuItemsFormatter(payload,images,menu_id);
-    const item = await Items.bulkCreate(newItems as ItemInput[]);
-    return item;
+    if(newItems.length> 0){
+        const item = await Items.bulkCreate(newItems as ItemInput[], {updateOnDuplicate: ["item_id"]});
+        return item;
+    }
+    return [];
+
 }
 
 export const create = async (payload: any,profile_id:number): Promise<MenuOutput> => {

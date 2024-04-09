@@ -4,7 +4,8 @@ import Menu from './Menu';
 import OrderItems from './OrderItems';
 
 export enum ItemState{
-    SOLD_OUT,AVAILABLE
+    SOLD_OUT
+    ,AVAILABLE
 }
 interface ItemAttributes{
     item_id:number;
@@ -60,9 +61,7 @@ export const ITEM_MODEL: ModelAttributes<Items> = {
         type: DataTypes.DOUBLE,
       },
       itemState: {
-        type: DataTypes.ENUM({
-          values: ['SOLD_OUT','AVAILABLE']
-        }),
+        type: DataTypes.INTEGER,
       },
       menu_id: {
         type: DataTypes.INTEGER,
@@ -115,9 +114,8 @@ static initModel(sequelize: Sequelize) {
 
 static associate(_models: Model[]) {
     Items.belongsToMany(Order, { through: OrderItems,as :'order',foreignKey:"order_id"} );
+    Items.belongsTo(Menu, { foreignKey:"menu_id"} );
 
-    Menu.hasMany(Items,{
-        foreignKey :'menu_id'
-    });
+
 }
 }

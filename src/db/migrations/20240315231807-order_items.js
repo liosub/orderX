@@ -2,7 +2,7 @@
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
-  async up (queryInterface, Sequelize) {
+  async up(queryInterface, Sequelize) {
     /**
      * Add altering commands here.
      *
@@ -15,7 +15,7 @@ module.exports = {
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER,
-      },  
+      },
       order_id: {
         type: Sequelize.INTEGER,
         references: {
@@ -30,6 +30,12 @@ module.exports = {
           key: 'item_id'
         }
       },
+      quantity: {
+        type: Sequelize.INTEGER,
+      },
+      price: {
+        type: Sequelize.BIGINT,
+      },
       createdAt: {
         defaultValue: Sequelize.NOW,
         type: Sequelize.DATE
@@ -41,7 +47,7 @@ module.exports = {
     });
   },
 
-  async down (queryInterface, Sequelize) {
+  async down(queryInterface, Sequelize) {
     /**
      * Add reverting commands here.
      *

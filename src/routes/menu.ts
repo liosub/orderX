@@ -1,24 +1,27 @@
 import { Router, Request, Response } from 'express'
 import * as menuServiceImpl from '../db/services/MenuServiceImpl'
-import { MenuInput } from '../db/models/Menu'
+import { MenuInput, MenuOutput } from '../db/models/Menu'
 import verifyToken from '../middleware/authMiddleware'
 import { uploadItmes } from '../middleware/upload'
 
 const menuRouter = Router()
 
 
-menuRouter.get('/:id', verifyToken,async (req: Request, res: Response) => {
-    const id = Number(req.params.id)
-    
-    const result = await menuServiceImpl.getById(id)
-    
-    return res.status(200).send(result)
+menuRouter.get('/', verifyToken,async (req: Request, res: Response) => {
+    try{
+        const result = await menuServiceImpl.getByProfileId(req.token._id);    
+        return res.status(200).send(result);
+    }
+    catch(error){
+        return res.status(400).json({error:error});    
+    }
 })
 
 menuRouter.post('/createMany',verifyToken,uploadItmes,async (req: Request, res: Response) => {
     try{
         const images = req.files as {[fieldname :string] :Express.Multer.File[]};
         const payload =req.body;
+        console.log(payload,images)
         const savedMenu = await menuServiceImpl.create(payload,req.token._id);
         const result = await menuServiceImpl.createMany(payload,images,savedMenu.menu_id);
         return res.status(200).send(result);
@@ -49,6 +52,7 @@ menuRouter.put('/:id', verifyToken,async (req: Request, res: Response) => {
 })
 
 menuRouter.delete('/:id', verifyToken,async (req: Request, res: Response) => {
+    try{
     const id = Number(req.params.id)
 
     const result = await menuServiceImpl.deleteById(id)
@@ -56,6 +60,10 @@ menuRouter.delete('/:id', verifyToken,async (req: Request, res: Response) => {
     return res.status(200).send({
         success: result
     })
+}
+catch(error){
+    return res.status(400).json({error:error});    
+}
 })
 
 

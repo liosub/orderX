@@ -6,6 +6,8 @@ interface OrderItemsAtrributes{
     id:number;
     order_id:number;
     item_id:number;
+    quantity:number;
+    price:bigint;
     createdAt?: Date;
     updatedAt?: Date;
 
@@ -26,12 +28,20 @@ export const ORDER_ITEM_MODEL: ModelAttributes<OrderItems> = {
     },
     item_id: {
         type: DataTypes.INTEGER,
+    },
+    quantity: {
+        type: DataTypes.INTEGER,
+    },
+    price: {
+        type: DataTypes.BIGINT,
     }
 }
 export default class OrderItems extends Model<OrderItemsAtrributes,OrderItemsInput> implements OrderItemsAtrributes{
     id!:number;
     order_id!:number;
     item_id!:number;
+    quantity!:number;
+    price!:bigint;
     public readonly createdAt!: Date;
     public readonly updatedAt!: Date;
 
