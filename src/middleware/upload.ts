@@ -16,7 +16,7 @@ const storage = multer.diskStorage({
     cb(null, "./public/images/uploads");
   },
   filename: function(req, file, cb) {
-    cb(null, `any-${file.originalname}`);
+    cb(null, `${Date.now()}-any-${file.originalname}`);
     
   },
 });
@@ -51,6 +51,6 @@ export const uploadLogo = multer({storage: storage, fileFilter : fileFilter}).fi
 export const uploadItmes = multer({storage: storageX, fileFilter : fileFilter}).fields([
   { 
     name: 'images', 
-    maxCount: 5 
+    maxCount: 10 
   }
 ]);

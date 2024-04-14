@@ -13,7 +13,6 @@ const profileRouter = Router()
 
 profileRouter.get('/me', verifyToken,async (req: Request, res: Response) => {
     const id = Number(req.token._id)
-    console.log(id)
     const result = await profileServiceImpl.getById(id)
     return res.status(200).send(result)
 })

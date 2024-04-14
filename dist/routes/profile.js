@@ -47,7 +47,6 @@ const QR_URI = process.env.QRCODE_URI;
 const profileRouter = (0, express_1.Router)();
 profileRouter.get('/me', authMiddleware_1.default, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const id = Number(req.token._id);
-    console.log(id);
     const result = yield profileServiceImpl.getById(id);
     return res.status(200).send(result);
 }));

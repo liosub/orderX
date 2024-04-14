@@ -22,7 +22,7 @@ export async function createQR(businessName:string,dataForQRcode: string, center
   const center = (width - cwidth * 1.40) / 2;
   ctx.drawImage(img, center, center, cwidth, cwidth);
   const buffer =canvas.toBuffer("image/png");
-  await fs.writeFileSync(`./public/images/QRcodes/${businessName}-QR.png`, buffer);
+  await fs.writeFileSync(`./public/images/QRcodes/${businessName}`, buffer);
 }
 
 

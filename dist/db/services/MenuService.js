@@ -74,8 +74,11 @@ function menuItemsFormatter(payload, images, menu_id) {
 }
 const createManyItems = (payload, images, menu_id) => __awaiter(void 0, void 0, void 0, function* () {
     const newItems = menuItemsFormatter(payload, images, menu_id);
-    const item = yield Items_1.default.bulkCreate(newItems, { updateOnDuplicate: ["item_id"] });
-    return item;
+    if (newItems.length > 0) {
+        const item = yield Items_1.default.bulkCreate(newItems, { updateOnDuplicate: ["item_id"] });
+        return item;
+    }
+    return [];
 });
 exports.createManyItems = createManyItems;
 const create = (payload, profile_id) => __awaiter(void 0, void 0, void 0, function* () {

@@ -53,7 +53,6 @@ menuRouter.post('/createMany', authMiddleware_1.default, upload_1.uploadItmes, (
     try {
         const images = req.files;
         const payload = req.body;
-        console.log(payload, images);
         const savedMenu = yield menuServiceImpl.create(payload, req.token._id);
         const result = yield menuServiceImpl.createMany(payload, images, savedMenu.menu_id);
         return res.status(200).send(result);

@@ -20,7 +20,7 @@ const storage = multer_1.default.diskStorage({
         cb(null, "./public/images/uploads");
     },
     filename: function (req, file, cb) {
-        cb(null, `any-${file.originalname}`);
+        cb(null, `${Date.now()}-any-${file.originalname}`);
     },
 });
 const storageX = multer_1.default.diskStorage({
@@ -50,6 +50,6 @@ exports.uploadLogo = (0, multer_1.default)({ storage: storage, fileFilter: fileF
 exports.uploadItmes = (0, multer_1.default)({ storage: storageX, fileFilter: fileFilter }).fields([
     {
         name: 'images',
-        maxCount: 5
+        maxCount: 10
     }
 ]);

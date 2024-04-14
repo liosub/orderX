@@ -21,7 +21,6 @@ menuRouter.post('/createMany',verifyToken,uploadItmes,async (req: Request, res: 
     try{
         const images = req.files as {[fieldname :string] :Express.Multer.File[]};
         const payload =req.body;
-        console.log(payload,images)
         const savedMenu = await menuServiceImpl.create(payload,req.token._id);
         const result = await menuServiceImpl.createMany(payload,images,savedMenu.menu_id);
         return res.status(200).send(result);
