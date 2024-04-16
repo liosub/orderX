@@ -56,7 +56,8 @@ function menuItemsFormatter(payload, images, menu_id) {
                 allergens: "",
                 specialOffer: 0.0,
                 itemState: Items_1.ItemState.AVAILABLE,
-                image: ""
+                image: "",
+                additionalFields: ""
             };
             if (it.item_id) {
                 item.item_id = it.item_id;
@@ -64,6 +65,7 @@ function menuItemsFormatter(payload, images, menu_id) {
             item.title = it.title;
             item.description = it.description;
             item.price = it.price;
+            item.additionalFields = JSON.stringify(it.additionalFields);
             item.image = (it.item_image) ? it.item_image : (_a = images["images"][i]) === null || _a === void 0 ? void 0 : _a.path;
             item.allergens = it.allergens;
             item.itemState = (it.itemState == 0) ? Items_1.ItemState.SOLD_OUT : Items_1.ItemState.AVAILABLE;
@@ -96,7 +98,8 @@ const create = (payload, profile_id) => __awaiter(void 0, void 0, void 0, functi
     menu.profile_id = profile_id;
     const [newMenu] = yield Menu_1.default.findOrCreate({
         where: {
-            menuTitle: menu.menuTitle
+            menuTitle: menu.menuTitle,
+            profile_id: profile_id
         },
         defaults: menu
     });

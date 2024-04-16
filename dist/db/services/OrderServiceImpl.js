@@ -32,7 +32,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteById = exports.getAllIncludeGroupBy = exports.getAllOrderTable = exports.getAll = exports.getById = exports.update = exports.create = void 0;
+exports.deleteById = exports.getOrdersAnalyticsData = exports.getAllOrderTable = exports.getAll = exports.getById = exports.update = exports.create = void 0;
 const orderService = __importStar(require("./OrderService"));
 const create = (payload) => __awaiter(void 0, void 0, void 0, function* () {
     return orderService.create(payload);
@@ -54,10 +54,10 @@ const getAllOrderTable = () => __awaiter(void 0, void 0, void 0, function* () {
     return orderService.getAllOrderTable();
 });
 exports.getAllOrderTable = getAllOrderTable;
-const getAllIncludeGroupBy = () => __awaiter(void 0, void 0, void 0, function* () {
-    return yield orderService.getAllOrderGroupBy();
+const getOrdersAnalyticsData = (orderId) => __awaiter(void 0, void 0, void 0, function* () {
+    return yield orderService.getOrdersAnalyticsData(orderId);
 });
-exports.getAllIncludeGroupBy = getAllIncludeGroupBy;
+exports.getOrdersAnalyticsData = getOrdersAnalyticsData;
 const deleteById = (id) => __awaiter(void 0, void 0, void 0, function* () {
     return orderService.deleteById(id);
 });

@@ -48,6 +48,9 @@ exports.ITEM_MODEL = {
     itemState: {
         type: sequelize_1.DataTypes.INTEGER,
     },
+    additionalFields: {
+        type: sequelize_1.DataTypes.STRING,
+    },
     menu_id: {
         type: sequelize_1.DataTypes.INTEGER,
         allowNull: true,

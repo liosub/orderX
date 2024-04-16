@@ -39,21 +39,26 @@ const express_1 = require("express");
 const orderServiceImpl = __importStar(require("../db/services/OrderServiceImpl"));
 const authMiddleware_1 = __importDefault(require("../middleware/authMiddleware"));
 const orderRouter = (0, express_1.Router)();
-orderRouter.get('/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const id = Number(req.params.id);
-    const result = yield orderServiceImpl.getById(id);
-    return res.status(200).send(result);
-}));
-orderRouter.get('/', authMiddleware_1.default, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield orderServiceImpl.getAll();
-    // getAllOrderTable()
-    return res.status(200).send(result);
-}));
+// orderRouter.get('/:id', async (req: Request, res: Response) => {
+//     const id = Number(req.params.id)
+//     const result = await orderServiceImpl.getById(id)
+//     return res.status(200).send(result)
+// })
+// orderRouter.get('/', verifyToken,async (req: Request, res: Response) => {    
+//     const result = await orderServiceImpl.getAll()
+//     // getAllOrderTable()
+//     return res.status(200).send(result)
+// })
 /**/
-orderRouter.get('/groupBy/:id', authMiddleware_1.default, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const id = Number(req.params.id);
-    const result = yield orderServiceImpl.getAllIncludeGroupBy();
-    return res.status(200).send(result);
+orderRouter.get("/opt", authMiddleware_1.default, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const id = Number(req.token._id);
+        const result = yield orderServiceImpl.getOrdersAnalyticsData(id);
+        return res.status(200).send(result);
+    }
+    catch (error) {
+        res.status(400).json({ error: error });
+    }
 }));
 orderRouter.post('/', authMiddleware_1.default, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
