@@ -65,7 +65,7 @@ export const getAll = async (): Promise<any[]> => {
     );
 }
 
-export const getAllOrderGroupBy = async (): Promise<any[]> => {
+export const getOrdersAnalyticsData = async (orderId:number): Promise<any[]> => {
     return Order.findAll({
             attributes: [
                 [Sequelize.fn("COUNT", Sequelize.col("*")), "orderCount"],
@@ -73,6 +73,9 @@ export const getAllOrderGroupBy = async (): Promise<any[]> => {
                 [Sequelize.fn("AVG", Sequelize.col("revenue")), "orderAvg"], 
              
             ],
+            where:{
+                order_id:orderId
+            },
             // group: ['id']
   
     });

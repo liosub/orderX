@@ -45,6 +45,9 @@ module.exports = {
         type: Sequelize.INTEGER,
         defaultValue:0
       },
+      additionalFields:{
+        type: Sequelize.STRING,
+      },
       menu_id: {
         type: Sequelize.INTEGER,
         allowNull: true,

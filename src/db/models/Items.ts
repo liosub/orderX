@@ -18,6 +18,7 @@ interface ItemAttributes{
     allergens?:string;
     specialOffer?:number;
     itemState?:ItemState;
+    additionalFields?:string;
     menu_id?:number;
     createdAt?: Date;
     updatedAt?: Date;
@@ -63,6 +64,9 @@ export const ITEM_MODEL: ModelAttributes<Items> = {
       itemState: {
         type: DataTypes.INTEGER,
       },
+      additionalFields:{
+        type: DataTypes.STRING,
+      },
       menu_id: {
         type: DataTypes.INTEGER,
         allowNull: true,
@@ -95,6 +99,7 @@ export default class Items extends Model<ItemAttributes,ItemInput> implements It
     public allergens!:string;
     public itemState!:ItemState;
     public specialOffer!:number;
+    public additionalFields!:string;
     public menu_id!:number;
     public readonly createdAt!: Date;
     public readonly updatedAt!: Date;

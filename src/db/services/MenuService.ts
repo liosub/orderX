@@ -18,7 +18,8 @@ function menuItemsFormatter(payload:any,images:any,menu_id:number):ItemInput[]{
             allergens:"",
             specialOffer:0.0,
             itemState:ItemState.AVAILABLE,
-            image:""
+            image:"",
+            additionalFields:""
         };
             if(it.item_id){
                 item.item_id= it.item_id;
@@ -26,9 +27,11 @@ function menuItemsFormatter(payload:any,images:any,menu_id:number):ItemInput[]{
             item.title= it.title;
             item.description= it.description;
             item.price= it.price;
+            item.additionalFields=JSON.stringify(it.additionalFields)
             item.image=(it.item_image)? it.item_image: images["images"][i]?.path;
             item.allergens= it.allergens;
             item.itemState=(it.itemState == 0)?ItemState.SOLD_OUT : ItemState.AVAILABLE;
+
             itemsX.push(item);
         });
     }
@@ -60,7 +63,8 @@ export const create = async (payload: any,profile_id:number): Promise<MenuOutput
     menu.profile_id= profile_id;
     const [newMenu] = await Menu.findOrCreate({
         where: {
-            menuTitle: menu.menuTitle
+            menuTitle: menu.menuTitle,
+            profile_id:profile_id
         },
         defaults: menu as MenuInput
     });

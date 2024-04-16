@@ -22,8 +22,8 @@ export const getAllOrderTable = async (): Promise<OrderOutput[]> => {
     return  orderService.getAllOrderTable()
 }
 
-export const getAllIncludeGroupBy = async (): Promise<any[]> => {
-    return await orderService.getAllOrderGroupBy()
+export const getOrdersAnalyticsData = async (orderId:number): Promise<any[]> => {
+    return await orderService.getOrdersAnalyticsData(orderId)
 }
 
 export const deleteById = async (id: number): Promise<boolean> => {
