@@ -23,7 +23,7 @@ menuRouter.post('/createMany',verifyToken,uploadItmes,async (req: Request, res: 
         const payload =req.body;
         const savedMenu = await menuServiceImpl.create(payload,req.token._id);
         const result = await menuServiceImpl.createMany(payload,images,savedMenu.menu_id);
-        return res.status(200).send(result);
+        return res.status(200).send(payload);
     }
     catch(error){
         return res.status(400).json({error:error});    

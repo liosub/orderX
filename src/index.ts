@@ -3,6 +3,7 @@ import morgan from 'morgan';
 import dotenv from 'dotenv';
 import bodyParser from "body-parser";
 import cors from 'cors';
+
 import routes from './routes';
 import dbInit from './db/init'
 import path from "path";
