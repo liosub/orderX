@@ -41,11 +41,12 @@ const dotenv_1 = __importDefault(require("dotenv"));
 const Menu_1 = __importDefault(require("../models/Menu"));
 dotenv_1.default.config();
 function menuItemsFormatter(payload, images, menu_id) {
+    var _a;
     const itemsX = [];
     for (var i = 0; i < payload.sections.length; i++) {
         let section = JSON.parse(payload.sections[i]);
+        var j = 0;
         section === null || section === void 0 ? void 0 : section.items.forEach((it) => {
-            var _a;
             const item = {
                 menu_id: menu_id,
                 sectionTitle: section.title,
@@ -66,11 +67,14 @@ function menuItemsFormatter(payload, images, menu_id) {
             item.description = it.description;
             item.price = it.price;
             item.additionalFields = JSON.stringify(it.additionalFields);
-            item.image = (it.item_image) ? it.item_image : (_a = images["images"][i]) === null || _a === void 0 ? void 0 : _a.path;
+            item.image = (it.item_image) ? it.item_image : "none";
             item.allergens = it.allergens;
             item.itemState = (it.itemState == 0) ? Items_1.ItemState.SOLD_OUT : Items_1.ItemState.AVAILABLE;
             itemsX.push(item);
         });
+    }
+    for (var j = 0; j < itemsX.length; j++) {
+        itemsX[j].image = (itemsX[j].image != "none") ? itemsX[j].image : (_a = images["images"][j]) === null || _a === void 0 ? void 0 : _a.path;
     }
     return itemsX;
 }

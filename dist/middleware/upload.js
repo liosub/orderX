@@ -50,6 +50,6 @@ exports.uploadLogo = (0, multer_1.default)({ storage: storage, fileFilter: fileF
 exports.uploadItmes = (0, multer_1.default)({ storage: storageX, fileFilter: fileFilter }).fields([
     {
         name: 'images',
-        maxCount: 10
+        maxCount: 20
     }
 ]);

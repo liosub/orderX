@@ -51,6 +51,6 @@ export const uploadLogo = multer({storage: storage, fileFilter : fileFilter}).fi
 export const uploadItmes = multer({storage: storageX, fileFilter : fileFilter}).fields([
   { 
     name: 'images', 
-    maxCount: 10 
+    maxCount: 20 
   }
 ]);
