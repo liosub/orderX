@@ -32,7 +32,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteById = exports.getAllByMenuId = exports.getBySection = exports.getById = exports.update = exports.create = void 0;
+exports.deleteById = exports.getAllItemsByMenuId = exports.getAllByMenuId = exports.getBySection = exports.getById = exports.update = exports.create = void 0;
 const itemsService = __importStar(require("./ItemsService"));
 const create = (payload) => __awaiter(void 0, void 0, void 0, function* () {
     return itemsService.create(payload);
@@ -54,6 +54,10 @@ const getAllByMenuId = (menu_id) => __awaiter(void 0, void 0, void 0, function* 
     return itemsService.getAll(menu_id);
 });
 exports.getAllByMenuId = getAllByMenuId;
+const getAllItemsByMenuId = (menu_id) => __awaiter(void 0, void 0, void 0, function* () {
+    return itemsService.getAllForGuest(menu_id);
+});
+exports.getAllItemsByMenuId = getAllItemsByMenuId;
 const deleteById = (id) => __awaiter(void 0, void 0, void 0, function* () {
     return itemsService.deleteById(id);
 });

@@ -46,10 +46,16 @@ itemsRouter.get('/:id', (req, res) => __awaiter(void 0, void 0, void 0, function
     const result = yield itemsServiceImpl.getById(id);
     return res.status(200).send(result);
 }));
-itemsRouter.get('/bySection/:section', authMiddleware_1.default, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const section = (req.params.section);
-    const result = yield itemsServiceImpl.getBySection(section);
-    return res.status(200).send(result);
+itemsRouter.post('/guest/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        console.log(req.params.id);
+        const menuId = Number(req.params.id);
+        const result = yield itemsServiceImpl.getAllItemsByMenuId(menuId);
+        return res.status(200).send(result);
+    }
+    catch (error) {
+        return res.status(400).json({ error: error });
+    }
 }));
 itemsRouter.get('/', authMiddleware_1.default, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {

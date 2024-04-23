@@ -113,7 +113,6 @@ exports.create = create;
 const getById = (id) => __awaiter(void 0, void 0, void 0, function* () {
     const menu = yield Menu_1.default.findByPk(id);
     if (!menu) {
-        //@todo throw custom error
         throw new Error('not found');
     }
     return menu;

@@ -12,9 +12,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getBySection = exports.getAll = exports.deleteById = exports.update = exports.getById = exports.create = void 0;
+exports.getBySection = exports.getAllForGuest = exports.getAll = exports.deleteById = exports.update = exports.getById = exports.create = void 0;
 const Items_1 = __importDefault(require("../models/Items"));
 const dotenv_1 = __importDefault(require("dotenv"));
+const Menu_1 = __importDefault(require("../models/Menu"));
 dotenv_1.default.config();
 const create = (payload) => __awaiter(void 0, void 0, void 0, function* () {
     const item = yield Items_1.default.create(payload);
@@ -54,6 +55,16 @@ const getAll = (menu_id) => __awaiter(void 0, void 0, void 0, function* () {
     });
 });
 exports.getAll = getAll;
+const getAllForGuest = (menu_id) => __awaiter(void 0, void 0, void 0, function* () {
+    return Items_1.default.findAll({
+        include: [{ model: Menu_1.default, attributes: ["menuTitle", "menuDetails"] }],
+        attributes: ["sectionTitle", "sectionDescription", "title", "description", "image", "price", "itemState", "additionalFields"],
+        where: {
+            menu_id: menu_id
+        },
+    });
+});
+exports.getAllForGuest = getAllForGuest;
 const getBySection = (section) => __awaiter(void 0, void 0, void 0, function* () {
     return Items_1.default.findAll({
         where: {

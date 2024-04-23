@@ -47,6 +47,17 @@ export const getAll = async (menu_id:number): Promise<ItemOutput[]> => {
     })
 }
 
+export const getAllForGuest = async (menu_id:number): Promise<ItemOutput[]> => {
+    return  Items.findAll({
+        include:[{model: Menu,attributes:["menuTitle","menuDetails"]}],
+        attributes:["sectionTitle","sectionDescription","title","description","image","price","itemState","additionalFields"],
+        where: {
+            menu_id:menu_id
+        },
+   })
+}
+
+
 export const getBySection = async (section:string): Promise<ItemOutput[]> => {
     return  Items.findAll({
         where: {

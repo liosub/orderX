@@ -16,12 +16,15 @@ itemsRouter.get('/:id', async (req: Request, res: Response) => {
 })
 
 
-itemsRouter.get('/bySection/:section', verifyToken,async (req: Request, res: Response) => {
-    const section = (req.params.section)
-    
-    const result = await itemsServiceImpl.getBySection(section)
-    
-    return res.status(200).send(result)
+itemsRouter.post('/guest/:id',async (req: Request, res: Response) => {
+    try{
+        const menuId = Number(req.params.id)
+        const result = await itemsServiceImpl.getAllItemsByMenuId(menuId);    
+        return res.status(200).send(result);
+    }
+    catch(error){
+        return res.status(400).json({error:error});    
+    }
 })
 
 itemsRouter.get('/', verifyToken,async (req: Request, res: Response) => {

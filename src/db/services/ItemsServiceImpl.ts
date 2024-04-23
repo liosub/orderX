@@ -20,6 +20,11 @@ export const getBySection = async (section: string): Promise<ItemOutput[]> => {
 export const getAllByMenuId = async (menu_id: number): Promise<ItemOutput[]> => {
     return  itemsService.getAll(menu_id)
 }
+
+export const getAllItemsByMenuId = async (menu_id: number): Promise<ItemOutput[]> => {
+    return  itemsService.getAllForGuest(menu_id)
+}
+
 export const deleteById = async (id: number): Promise<boolean> => {
     return  itemsService.deleteById(id)
 

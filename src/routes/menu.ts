@@ -6,7 +6,6 @@ import { uploadItmes } from '../middleware/upload'
 
 const menuRouter = Router()
 
-
 menuRouter.get('/', verifyToken,async (req: Request, res: Response) => {
     try{
         const result = await menuServiceImpl.getByProfileId(req.token._id);    

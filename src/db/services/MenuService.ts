@@ -80,9 +80,7 @@ export const create = async (payload: any,profile_id:number): Promise<MenuOutput
 
 export const getById = async (id: number): Promise<MenuOutput> => {
     const menu = await Menu.findByPk(id)
-
     if (!menu) {
-        //@todo throw custom error
         throw new Error('not found')
     }
     return menu
