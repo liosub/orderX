@@ -1,11 +1,11 @@
 import Items, { ItemInput, ItemOutput ,ItemState} from "../models/Items"
 import dotenv from 'dotenv';
 import Menu, { MenuInput, MenuOutput } from "../models/Menu";
-import { it } from "node:test";
 dotenv.config();
 
 function menuItemsFormatter(payload:any,images:any,menu_id:number):ItemInput[]{
     const itemsX:ItemInput[]=[];
+
     for(var i=0;i<payload.sections.length;i++){
         let section=JSON.parse(payload.sections[i]);
         var j=0;
@@ -28,30 +28,34 @@ function menuItemsFormatter(payload:any,images:any,menu_id:number):ItemInput[]{
             }
             item.title= it.title;
             item.description= it.description;
-            item.price= it.price as number;
+            item.price= it.price as number || 0.0;
             item.additionalFields=JSON.stringify(it.additionalFields)
-            item.image=(it.item_image)? it.item_image: "none";
-            item.allergens= it.allergens;
+            item.image=(it.item_image!=null)? it.item_image: "none";
+            item.allergens= it.allergens || "";
             item.itemState=(it.itemState == 0)?ItemState.SOLD_OUT : ItemState.AVAILABLE;
             itemsX.push(item);
         });
     }
+    var i=0;
     for(var j=0;j<itemsX.length;j++){
-        itemsX[j].image=(itemsX[j].image != "none")? itemsX[j].image: images["images"][j]?.path;   
+        if(itemsX[j].image == "none"){
+            itemsX[j].image=images["images"][i]?.path as string;   
+            i++;
+        }
     }
     return itemsX;
 }
 
-export const createManyItems = async (payload: any,images:any,menu_id:number): Promise<ItemOutput[]> => {
+export const createOrUpdateManyItems = async (payload: any,images:any,menu_id:number): Promise<ItemOutput[]> => {
     const newItems= menuItemsFormatter(payload,images,menu_id);
     if(newItems.length> 0){
-            const item = await Items.bulkCreate(newItems as ItemInput[], {updateOnDuplicate: ["item_id"]});
-            return item;    
-       
+        const item = await Items.bulkCreate(newItems as ItemInput[], {updateOnDuplicate: ["item_id"]});
+        return item;    
     }
     return [];
 
 }
+
 
 export const create = async (payload: any,profile_id:number): Promise<MenuOutput> => {
     const menu:MenuInput={

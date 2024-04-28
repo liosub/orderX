@@ -95,11 +95,19 @@ itemsRouter.put('/:id', authMiddleware_1.default, upload_1.uploadItmes, (req, re
     const result = yield itemsServiceImpl.update(id, payload);
     return res.status(200).send(result);
 }));
-itemsRouter.delete('/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const id = Number(req.params.id);
-    const result = yield itemsServiceImpl.deleteById(id);
-    return res.status(200).send({
-        success: result
-    });
+itemsRouter.post('/itemX/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const menu_id = Number(req.params.id);
+        const itemsId = req.body;
+        const result = yield itemsServiceImpl.deleteById(menu_id, itemsId);
+        return res.status(200).send({
+            success: "Success"
+        });
+    }
+    catch (error) {
+        return res.status(400).send({
+            success: "Failed", error
+        });
+    }
 }));
 exports.default = itemsRouter;

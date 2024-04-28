@@ -20,6 +20,7 @@ const qrGenerator_1 = require("../../middleware/qrGenerator");
 dotenv_1.default.config();
 const URI = process.env.URI;
 const QR_URI = process.env.QRCODE_URI;
+const REACT_APP_STLLR_URL = process.env.REACT_APP_STLLR_URL;
 const create = (payload) => __awaiter(void 0, void 0, void 0, function* () {
     const encryptedUserPassword = yield bcrypt_1.default.hash(payload.password, 10);
     payload.password = encryptedUserPassword;
@@ -73,9 +74,9 @@ exports.update = update;
 const createNewProfile = (id, payload) => __awaiter(void 0, void 0, void 0, function* () {
     const profile = yield Profile_1.default.findByPk(id);
     if (!profile) {
-        // @todo throw custom error
         throw new Error('not found');
     }
+    payload.profile_id = profile.profile_id;
     yield (0, exports.qrCodeGenerator)(payload);
     payload.url = `${URI}/profile/${profile.profile_id}`;
     payload.QRCode = `${QR_URI}/${payload.QRCode}`;
@@ -85,7 +86,7 @@ const createNewProfile = (id, payload) => __awaiter(void 0, void 0, void 0, func
 exports.createNewProfile = createNewProfile;
 const qrCodeGenerator = (payload) => __awaiter(void 0, void 0, void 0, function* () {
     const qrCodeName = payload.QRCode || payload.businessName + "QR";
-    const url = payload.url || `${URI}/profile/${payload.profile_id}`;
+    const url = `${REACT_APP_STLLR_URL}/menu/${payload.profile_id}`;
     var base64str = (0, qrGenerator_1.base64_encode)(payload.logo);
     if (payload.logo) {
         yield (0, qrGenerator_1.createQR)(qrCodeName, url, base64str, 150, 50);

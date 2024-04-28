@@ -25,7 +25,7 @@ export const getAllItemsByMenuId = async (menu_id: number): Promise<ItemOutput[]
     return  itemsService.getAllForGuest(menu_id)
 }
 
-export const deleteById = async (id: number): Promise<boolean> => {
-    return  itemsService.deleteById(id)
+export const deleteById = async (id: number,itemsIds:number[]): Promise<void> => {
+    return await itemsService.deleteById(id,itemsIds);
 
 }

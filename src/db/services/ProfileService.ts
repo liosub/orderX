@@ -7,6 +7,7 @@ import { base64_encode, createQR } from '../../middleware/qrGenerator';
 dotenv.config();
 const URI = process.env.URI;
 const QR_URI= process.env.QRCODE_URI;
+const REACT_APP_STLLR_URL = process.env.REACT_APP_STLLR_URL;
 export const create = async (payload: ProfileInput): Promise<ProfileOutput> => {
     const encryptedUserPassword = await bcrypt.hash(payload.password, 10);
     payload.password =encryptedUserPassword;
@@ -65,9 +66,9 @@ export const update = async (id: number, payload: Partial<ProfileInput>): Promis
 export const createNewProfile = async (id: number, payload: Partial<ProfileInput>): Promise<ProfileOutput> => {
     const profile = await Profile.findByPk(id);
     if (!profile) {
-        // @todo throw custom error
         throw new Error('not found')
     }
+    payload.profile_id=profile.profile_id;
     await qrCodeGenerator(payload);
     payload.url = `${URI}/profile/${profile.profile_id}`;
     payload.QRCode = `${QR_URI}/${payload.QRCode}`;
@@ -75,9 +76,9 @@ export const createNewProfile = async (id: number, payload: Partial<ProfileInput
     return updateProfile
 }
 
-export const qrCodeGenerator = async ( payload: Partial<ProfileInput>): Promise<void> => {
+export const qrCodeGenerator = async ( payload: Partial<ProfileOutput>): Promise<void> => {
     const qrCodeName= payload.QRCode || payload.businessName+"QR";
-    const url = payload.url || `${URI}/profile/${payload.profile_id}`;
+    const url = `${REACT_APP_STLLR_URL}/menu/${payload.profile_id}`;
     var base64str = base64_encode(payload.logo);
     if(payload.logo){
         await createQR(qrCodeName,url,base64str ,150,50);

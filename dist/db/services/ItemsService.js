@@ -40,11 +40,16 @@ const update = (id, payload) => __awaiter(void 0, void 0, void 0, function* () {
     return item.update(payload);
 });
 exports.update = update;
-const deleteById = (id) => __awaiter(void 0, void 0, void 0, function* () {
-    const numDeleteditems = Items_1.default.destroy({
-        where: { item_id: id }
-    });
-    return !!numDeleteditems;
+const deleteById = (menu_id, itemsIds) => __awaiter(void 0, void 0, void 0, function* () {
+    itemsIds.map((item) => __awaiter(void 0, void 0, void 0, function* () {
+        yield Items_1.default.destroy({
+            where: {
+                menu_id: menu_id,
+                item_id: item
+            }
+        });
+    }));
+    return;
 });
 exports.deleteById = deleteById;
 const getAll = (menu_id) => __awaiter(void 0, void 0, void 0, function* () {
@@ -58,7 +63,7 @@ exports.getAll = getAll;
 const getAllForGuest = (menu_id) => __awaiter(void 0, void 0, void 0, function* () {
     return Items_1.default.findAll({
         include: [{ model: Menu_1.default, attributes: ["menuTitle", "menuDetails"] }],
-        attributes: ["sectionTitle", "sectionDescription", "title", "description", "image", "price", "itemState", "additionalFields"],
+        attributes: ["sectionTitle", "sectionDescription", "item_id", "title", "description", "image", "price", "itemState", "additionalFields", "allergens"],
         where: {
             menu_id: menu_id
         },

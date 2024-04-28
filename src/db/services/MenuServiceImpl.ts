@@ -5,8 +5,8 @@ import * as menuService from './MenuService'
 export const create = async (payload: MenuInput,profile_id:number): Promise<MenuOutput> => {
     return await menuService.create(payload,profile_id)
 }
-export const createMany = async (payload: any,images:any,menu_id:number): Promise<ItemOutput[]> => {
-    return menuService.createManyItems(payload,images,menu_id);
+export const createOrUpdateManyItems = async (payload: any,images:any,menu_id:number): Promise<ItemOutput[]> => {
+    return menuService.createOrUpdateManyItems(payload,images,menu_id);
 }
 
 export const update = async (id: number, payload: Partial<MenuInput>): Promise<MenuOutput> => {

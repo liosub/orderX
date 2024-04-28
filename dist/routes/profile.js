@@ -60,7 +60,6 @@ profileRouter.post('/createM', authMiddleware_1.default, upload_1.upload, (req, 
     const files = req.files;
     try {
         payload.logo = `${IMG_URI}/${files["logo"][0].filename}`;
-        // payload.bannerImage = `${IMG_URI}/${files["bannerImage"][0].filename}`;
         payload.QRCode = `${QR_URI}/${payload.businessName}-QR.png`;
         const result = yield profileServiceImpl.createNewProfile(req.token._id, payload);
         res.status(201).json({

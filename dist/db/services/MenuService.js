@@ -35,7 +35,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteById = exports.update = exports.getByProfileId = exports.getById = exports.create = exports.createManyItems = void 0;
+exports.deleteById = exports.update = exports.getByProfileId = exports.getById = exports.create = exports.createOrUpdateManyItems = void 0;
 const Items_1 = __importStar(require("../models/Items"));
 const dotenv_1 = __importDefault(require("dotenv"));
 const Menu_1 = __importDefault(require("../models/Menu"));
@@ -65,20 +65,24 @@ function menuItemsFormatter(payload, images, menu_id) {
             }
             item.title = it.title;
             item.description = it.description;
-            item.price = it.price;
+            item.price = it.price || 0.0;
             item.additionalFields = JSON.stringify(it.additionalFields);
-            item.image = (it.item_image) ? it.item_image : "none";
-            item.allergens = it.allergens;
+            item.image = (it.item_image != null) ? it.item_image : "none";
+            item.allergens = it.allergens || "";
             item.itemState = (it.itemState == 0) ? Items_1.ItemState.SOLD_OUT : Items_1.ItemState.AVAILABLE;
             itemsX.push(item);
         });
     }
+    var i = 0;
     for (var j = 0; j < itemsX.length; j++) {
-        itemsX[j].image = (itemsX[j].image != "none") ? itemsX[j].image : (_a = images["images"][j]) === null || _a === void 0 ? void 0 : _a.path;
+        if (itemsX[j].image == "none") {
+            itemsX[j].image = (_a = images["images"][i]) === null || _a === void 0 ? void 0 : _a.path;
+            i++;
+        }
     }
     return itemsX;
 }
-const createManyItems = (payload, images, menu_id) => __awaiter(void 0, void 0, void 0, function* () {
+const createOrUpdateManyItems = (payload, images, menu_id) => __awaiter(void 0, void 0, void 0, function* () {
     const newItems = menuItemsFormatter(payload, images, menu_id);
     if (newItems.length > 0) {
         const item = yield Items_1.default.bulkCreate(newItems, { updateOnDuplicate: ["item_id"] });
@@ -86,7 +90,7 @@ const createManyItems = (payload, images, menu_id) => __awaiter(void 0, void 0, 
     }
     return [];
 });
-exports.createManyItems = createManyItems;
+exports.createOrUpdateManyItems = createOrUpdateManyItems;
 const create = (payload, profile_id) => __awaiter(void 0, void 0, void 0, function* () {
     const menu = {
         menuTitle: "",

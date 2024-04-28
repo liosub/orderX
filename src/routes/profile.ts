@@ -29,7 +29,6 @@ profileRouter.post('/createM',verifyToken,upload, async (req: Request, res: Resp
     const files = req.files as {[fieldname :string] :Express.Multer.File[]};
     try{
         payload.logo = `${IMG_URI}/${files["logo"][0].filename}`;
-        // payload.bannerImage = `${IMG_URI}/${files["bannerImage"][0].filename}`;
         payload.QRCode= `${QR_URI}/${payload.businessName}-QR.png`;
         const result = await profileServiceImpl.createNewProfile(req.token._id,payload)
             res.status(201).json({

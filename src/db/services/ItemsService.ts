@@ -31,12 +31,16 @@ export const update = async (id: number, payload: Partial<Items>): Promise<ItemO
     return item.update(payload)
 }
 
-export const deleteById = async (id: number): Promise<boolean> => {
-    const numDeleteditems=  Items.destroy({
-        where: {item_id:id}
+export const deleteById = async (menu_id: number,itemsIds:number[]): Promise<void> => {
+    itemsIds.map(async(item) =>{
+        await Items.destroy({
+            where: {
+                menu_id:menu_id,
+                item_id:item
+            }
+        })
     })
-
-    return !!numDeleteditems
+    return
 }
 
 export const getAll = async (menu_id:number): Promise<ItemOutput[]> => {

@@ -75,13 +75,20 @@ itemsRouter.put('/:id',verifyToken,uploadItmes, async (req: Request, res: Respon
     return res.status(200).send(result)
 })
 
-itemsRouter.delete('/:id', async (req: Request, res: Response) => {
-    const id = Number(req.params.id)
+itemsRouter.post('/itemX/:id', async (req: Request, res: Response) => {
+    try{
+        const menu_id = Number(req.params.id)
+        const itemsId= req.body
+        const result = await itemsServiceImpl.deleteById(menu_id,itemsId)
+        return res.status(200).send({
+            success: "Success"
+        })
+    }
+    catch(error){
+        return res.status(400).send({
+            success:"Failed",error
+        })
+    }
 
-    const result = await itemsServiceImpl.deleteById(id)
-
-    return res.status(200).send({
-        success: result
-    })
 })
 export default itemsRouter;
