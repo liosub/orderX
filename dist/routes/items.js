@@ -48,7 +48,6 @@ itemsRouter.get('/:id', (req, res) => __awaiter(void 0, void 0, void 0, function
 }));
 itemsRouter.post('/guest/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        console.log(req.params.id);
         const menuId = Number(req.params.id);
         const result = yield itemsServiceImpl.getAllItemsByMenuId(menuId);
         return res.status(200).send(result);

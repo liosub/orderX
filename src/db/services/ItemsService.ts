@@ -50,7 +50,7 @@ export const getAll = async (menu_id:number): Promise<ItemOutput[]> => {
 export const getAllForGuest = async (menu_id:number): Promise<ItemOutput[]> => {
     return  Items.findAll({
         include:[{model: Menu,attributes:["menuTitle","menuDetails"]}],
-        attributes:["sectionTitle","sectionDescription","title","description","image","price","itemState","additionalFields"],
+        attributes:["sectionTitle","sectionDescription","item_id","title","description","image","price","itemState","additionalFields","allergens"],
         where: {
             menu_id:menu_id
         },
