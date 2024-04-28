@@ -16,6 +16,7 @@ exports.getBySection = exports.getAllForGuest = exports.getAll = exports.deleteB
 const Items_1 = __importDefault(require("../models/Items"));
 const dotenv_1 = __importDefault(require("dotenv"));
 const Menu_1 = __importDefault(require("../models/Menu"));
+const models_1 = require("../models");
 dotenv_1.default.config();
 const create = (payload) => __awaiter(void 0, void 0, void 0, function* () {
     const item = yield Items_1.default.create(payload);
@@ -61,13 +62,30 @@ const getAll = (menu_id) => __awaiter(void 0, void 0, void 0, function* () {
 });
 exports.getAll = getAll;
 const getAllForGuest = (menu_id) => __awaiter(void 0, void 0, void 0, function* () {
-    return Items_1.default.findAll({
-        include: [{ model: Menu_1.default, attributes: ["menuTitle", "menuDetails"] }],
-        attributes: ["sectionTitle", "sectionDescription", "item_id", "title", "description", "image", "price", "itemState", "additionalFields", "allergens"],
-        where: {
-            menu_id: menu_id
-        },
-    });
+    try {
+        return Items_1.default.findAll({
+            attributes: ["sectionTitle", "sectionDescription", "item_id", "title", "description", "image", "price", "itemState", "additionalFields", "allergens"],
+            where: {
+                menu_id: menu_id
+            },
+            include: [
+                {
+                    model: Menu_1.default,
+                    attributes: ["menuTitle", "menuDetails", "profile_id"],
+                    include: [
+                        {
+                            model: models_1.Profile,
+                            attributes: ["businessName", "url"],
+                        }
+                    ]
+                },
+            ],
+        });
+    }
+    catch (error) {
+        console.log(error);
+        return [];
+    }
 });
 exports.getAllForGuest = getAllForGuest;
 const getBySection = (section) => __awaiter(void 0, void 0, void 0, function* () {

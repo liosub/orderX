@@ -32,7 +32,7 @@ orderRouter.get("/opt", verifyToken,async (req: Request, res: Response) => {
 })
 orderRouter.post('/', verifyToken,async (req: Request, res: Response) => {
     try{
-        const payload: OrderInput = req.body
+        const payload = req.body;
         const result = await orderServiceImpl.create(payload)
         return res.status(200).send(result)    
     }
