@@ -70,16 +70,15 @@ export const create = async (payload: any,profile_id:number): Promise<MenuOutput
     menu.accent=payload?.accent;
     menu.font=payload?.font;
     menu.profile_id= profile_id;
-    const [newMenu] = await Menu.findOrCreate({
-        where: {
-            menuTitle: menu.menuTitle,
-            profile_id:profile_id
-        },
-        defaults: menu as MenuInput
-    });
-
-    
-    return newMenu;
+    if(payload?.menu_id > 0){
+        const existMenu = await Menu.findByPk(payload.menu_id);
+        const updatedMenu :any= await existMenu?.update(menu) || {}; 
+        return updatedMenu
+    }
+    else{
+       const newMenu = await Menu.create(menu);
+       return newMenu;
+    }
 }
 
 export const getById = async (id: number): Promise<MenuOutput> => {

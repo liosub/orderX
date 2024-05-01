@@ -38,6 +38,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const orderServiceImpl = __importStar(require("../db/services/OrderServiceImpl"));
 const authMiddleware_1 = __importDefault(require("../middleware/authMiddleware"));
+const orderItemServiceImpl = __importStar(require("../db/services/OrderItemService"));
 const orderRouter = (0, express_1.Router)();
 // orderRouter.get('/:id', async (req: Request, res: Response) => {
 //     const id = Number(req.params.id)
@@ -62,8 +63,11 @@ orderRouter.get("/opt", authMiddleware_1.default, (req, res) => __awaiter(void 0
 }));
 orderRouter.post('/', authMiddleware_1.default, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
+        const profile_id = Number(req.token._id);
         const payload = req.body;
+        payload.profile_id = profile_id;
         const result = yield orderServiceImpl.create(payload);
+        const oderItems = yield orderItemServiceImpl.createMany(payload, result.order_id);
         return res.status(200).send(result);
     }
     catch (error) {

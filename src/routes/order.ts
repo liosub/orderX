@@ -2,6 +2,8 @@ import { Router, Request, Response } from 'express'
 import * as orderServiceImpl from '../db/services/OrderServiceImpl'
 import { OrderInput } from '../db/models/Order'
 import verifyToken from '../middleware/authMiddleware'
+import * as orderItemServiceImpl from '../db/services/OrderItemService'
+import { OrderItemsInput } from '../db/models/OrderItems'
 
 const orderRouter = Router()
 
@@ -32,9 +34,12 @@ orderRouter.get("/opt", verifyToken,async (req: Request, res: Response) => {
 })
 orderRouter.post('/', verifyToken,async (req: Request, res: Response) => {
     try{
-        const payload = req.body;
-        const result = await orderServiceImpl.create(payload)
-        return res.status(200).send(result)    
+        const profile_id = Number(req.token._id)
+        const payload:any= req.body;
+        payload.profile_id=profile_id;
+        const result = await orderServiceImpl.create(payload);
+        const oderItems = await orderItemServiceImpl.createMany(payload,result.order_id);
+        return res.status(200).send(result);    
     }
     catch(error){
         res.status(400).json({ error: error });

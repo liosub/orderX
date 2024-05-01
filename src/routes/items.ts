@@ -18,8 +18,9 @@ itemsRouter.get('/:id', async (req: Request, res: Response) => {
 
 itemsRouter.post('/guest/:id',async (req: Request, res: Response) => {
     try{
-        const menuId = Number(req.params.id)
-        const result = await itemsServiceImpl.getAllItemsByMenuId(menuId);    
+        const profile_id = Number(req.params.id);
+        const menu_id = (await menuServiceImpl.getByProfileId(profile_id)).menu_id;
+        const result = await itemsServiceImpl.getAllItemsByMenuId(menu_id);    
         return res.status(200).send(result);
     }
     catch(error){

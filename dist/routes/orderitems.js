@@ -55,14 +55,13 @@ orderItemRouter.post('/', (req, res) => __awaiter(void 0, void 0, void 0, functi
         res.status(400).json({ error: error });
     }
 }));
-orderItemRouter.post('/many/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        const payload = req.body;
-        const result = yield orderItemServiceImpl.createMany(payload);
-        return res.status(200).send(result);
-    }
-    catch (error) {
-        res.status(400).json({ error: error });
-    }
-}));
+// orderItemRouter.post('/many/', async (req: Request, res: Response) => {
+//     try {
+//         const payload: OrderItemsInput[] = req.body
+//         const result = await orderItemServiceImpl.createMany(payload)
+//         return res.status(200).send(result)
+//     } catch (error) {
+//         res.status(400).json({ error: error });
+//     }
+// })
 exports.default = orderItemRouter;

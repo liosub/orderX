@@ -17,34 +17,26 @@ const sequelize_1 = require("sequelize");
 const Items_1 = __importDefault(require("../models/Items"));
 const Order_1 = __importDefault(require("../models/Order"));
 const models_1 = require("../models");
-// function orderFormatter(payload:any,images:any,menu_id:number):ItemInput[]{
-//     const itemsX:ItemInput[]=[];
-//     for(var i=0;i<payload.sections.length;i++){
-//         let section=JSON.parse(payload.sections[i]);
-//         var j=0;
-//         section?.items.forEach((it:any)=>{
-//         const item:ItemInput={
-//             menu_id:menu_id,
-//             sectionTitle:section.title,
-//             sectionDescription:section.details,
-//             title:"",
-//             description:"",
-//             price:0,
-//             allergens:"",
-//             specialOffer:0.0,
-//             itemState:ItemState.AVAILABLE,
-//             image:"",
-//             additionalFields:""
-//         };
-//         });
-//     }
-//     var i=0;
-//     return itemsX;
-// }
+const orderStatus = ["Processing", "Canceled", "Done", "Pending"];
+function getRevenue(items) {
+    let revenue = 0;
+    items.forEach((it) => {
+        revenue += it.price;
+    });
+    return revenue;
+}
 const create = (payload) => __awaiter(void 0, void 0, void 0, function* () {
-    // notes: '', item_id: item.item_id, counter: 1, price: Number(item.price)
-    const order = yield Order_1.default.create(payload);
-    return order;
+    const order = {
+        profile_id: payload.profile_id,
+        menu_id: payload.menu_id,
+        customerName: "",
+        notes: payload.notes,
+        revenue: getRevenue(payload),
+        email: "",
+        status: orderStatus[0]
+    };
+    const newOrder = yield Order_1.default.create(order);
+    return newOrder;
 });
 exports.create = create;
 const getById = (id) => __awaiter(void 0, void 0, void 0, function* () {

@@ -14,13 +14,27 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getById = exports.createMany = exports.create = void 0;
 const OrderItems_1 = __importDefault(require("../models/OrderItems"));
+function orderFormatter(items, order_id) {
+    const orderItems = [];
+    for (var i = 0; i < items.length; i++) {
+        const orderItem = {
+            order_id: order_id,
+            item_id: items[i].item_id,
+            quantity: items[i].counter,
+            price: items[i].price,
+        };
+        orderItems.push(orderItem);
+    }
+    return orderItems;
+}
 const create = (payload) => __awaiter(void 0, void 0, void 0, function* () {
     const orderitems = yield OrderItems_1.default.create(payload);
     return orderitems;
 });
 exports.create = create;
-const createMany = (payload) => __awaiter(void 0, void 0, void 0, function* () {
-    const orderitems = yield OrderItems_1.default.bulkCreate(payload);
+const createMany = (payload, order_id) => __awaiter(void 0, void 0, void 0, function* () {
+    const newOrderItems = orderFormatter(payload, order_id);
+    const orderitems = yield OrderItems_1.default.bulkCreate(newOrderItems);
     return orderitems;
 });
 exports.createMany = createMany;

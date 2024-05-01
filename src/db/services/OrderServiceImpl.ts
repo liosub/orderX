@@ -1,8 +1,7 @@
-import { ItemOutput } from "../models/Items";
 import { OrderInput, OrderOutput } from "../models/Order"
 import * as orderService from './OrderService'
 
-export const create = async (payload: OrderInput): Promise<OrderOutput> => {
+export const create = async (payload: any): Promise<OrderOutput> => {
     return orderService.create(payload);
 }
 

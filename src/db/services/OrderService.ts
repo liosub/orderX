@@ -1,39 +1,30 @@
 import { Sequelize } from "sequelize";
 import Items,{ ItemOutput } from "../models/Items";
 import Order, { OrderInput, OrderOutput } from "../models/Order"
-import { Menu, Profile } from "../models";
+import { Profile } from "../models";
 
-// function orderFormatter(payload:any,images:any,menu_id:number):ItemInput[]{
-//     const itemsX:ItemInput[]=[];
+const orderStatus = ["Processing","Canceled","Done","Pending"];
 
-//     for(var i=0;i<payload.sections.length;i++){
-//         let section=JSON.parse(payload.sections[i]);
-//         var j=0;
-//         section?.items.forEach((it:any)=>{
-//         const item:ItemInput={
-//             menu_id:menu_id,
-//             sectionTitle:section.title,
-//             sectionDescription:section.details,
-//             title:"",
-//             description:"",
-//             price:0,
-//             allergens:"",
-//             specialOffer:0.0,
-//             itemState:ItemState.AVAILABLE,
-//             image:"",
-//             additionalFields:""
-//         };
-  
-//         });
-//     }
-//     var i=0;
-//     return itemsX;
-// }
+function getRevenue(items:any):Number{
+    let revenue=0;
+    items.forEach((it:any) =>{
+        revenue+=it.price
+    })
+    return revenue;
+}
 
-export const create = async (payload: OrderInput): Promise<OrderOutput> => {
-    // notes: '', item_id: item.item_id, counter: 1, price: Number(item.price)
-    const order = await Order.create(payload);
-    return order;
+export const create = async (payload: any): Promise<OrderOutput> => {
+    const order:any={
+        profile_id:payload.profile_id,
+        menu_id:payload.menu_id,
+        customerName:"",
+        notes:payload.notes,
+        revenue:getRevenue(payload),
+        email:"",
+        status:orderStatus[0]
+    };
+    const newOrder:OrderOutput = await Order.create(order as OrderInput);
+    return newOrder;
 }
 
 export const getById = async (id: number): Promise<OrderOutput> => {

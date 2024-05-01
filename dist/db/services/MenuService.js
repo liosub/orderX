@@ -104,14 +104,15 @@ const create = (payload, profile_id) => __awaiter(void 0, void 0, void 0, functi
     menu.accent = payload === null || payload === void 0 ? void 0 : payload.accent;
     menu.font = payload === null || payload === void 0 ? void 0 : payload.font;
     menu.profile_id = profile_id;
-    const [newMenu] = yield Menu_1.default.findOrCreate({
-        where: {
-            menuTitle: menu.menuTitle,
-            profile_id: profile_id
-        },
-        defaults: menu
-    });
-    return newMenu;
+    if ((payload === null || payload === void 0 ? void 0 : payload.menu_id) > 0) {
+        const existMenu = yield Menu_1.default.findByPk(payload.menu_id);
+        const updatedMenu = (yield (existMenu === null || existMenu === void 0 ? void 0 : existMenu.update(menu))) || {};
+        return updatedMenu;
+    }
+    else {
+        const newMenu = yield Menu_1.default.create(menu);
+        return newMenu;
+    }
 });
 exports.create = create;
 const getById = (id) => __awaiter(void 0, void 0, void 0, function* () {
