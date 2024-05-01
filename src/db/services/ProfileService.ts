@@ -70,7 +70,7 @@ export const createNewProfile = async (id: number, payload: Partial<ProfileInput
     }
     payload.profile_id=profile.profile_id;
     await qrCodeGenerator(payload);
-    payload.url = `${URI}/profile/${profile.profile_id}`;
+    payload.url = `${URI}/menu/${profile.profile_id}`;
     payload.QRCode = `${QR_URI}/${payload.QRCode}`;
     const updateProfile = await profile.update(payload);
     return updateProfile

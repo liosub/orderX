@@ -66,7 +66,8 @@ const getAllForGuest = (menu_id) => __awaiter(void 0, void 0, void 0, function* 
         return Items_1.default.findAll({
             attributes: ["sectionTitle", "sectionDescription", "item_id", "title", "description", "image", "price", "itemState", "additionalFields", "allergens"],
             where: {
-                menu_id: menu_id
+                menu_id: menu_id,
+                itemState: 1
             },
             include: [
                 {

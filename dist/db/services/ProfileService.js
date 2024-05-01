@@ -78,7 +78,7 @@ const createNewProfile = (id, payload) => __awaiter(void 0, void 0, void 0, func
     }
     payload.profile_id = profile.profile_id;
     yield (0, exports.qrCodeGenerator)(payload);
-    payload.url = `${URI}/profile/${profile.profile_id}`;
+    payload.url = `${URI}/menu/${profile.profile_id}`;
     payload.QRCode = `${QR_URI}/${payload.QRCode}`;
     const updateProfile = yield profile.update(payload);
     return updateProfile;
