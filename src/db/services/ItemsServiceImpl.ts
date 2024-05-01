@@ -1,3 +1,4 @@
+import { profile } from "console";
 import { ItemInput, ItemOutput } from "../models/Items"
 import * as itemsService from './ItemsService'
 
@@ -21,8 +22,8 @@ export const getAllByMenuId = async (menu_id: number): Promise<ItemOutput[]> => 
     return  itemsService.getAll(menu_id)
 }
 
-export const getAllItemsByMenuId = async (menu_id: number): Promise<ItemOutput[]> => {
-    return  itemsService.getAllForGuest(menu_id)
+export const getAllItemsByMenuId = async (menu_id: number): Promise<any[]> => {
+    return await itemsService.getAllForGuest(menu_id)
 }
 
 export const deleteById = async (id: number,itemsIds:number[]): Promise<void> => {

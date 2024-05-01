@@ -32,7 +32,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteById = exports.update = exports.createNewProfile = exports.findOrCreate = exports.create = exports.getByEmail = exports.getById = void 0;
+exports.deleteById = exports.update = exports.createNewProfile = exports.findOrCreate = exports.create = exports.getByIdGuest = exports.getByEmail = exports.getById = void 0;
 const profileService = __importStar(require("./ProfileService"));
 const getById = (id) => {
     return profileService.getById(id);
@@ -42,6 +42,11 @@ const getByEmail = (email) => {
     return profileService.getByEmail(email);
 };
 exports.getByEmail = getByEmail;
+const getByIdGuest = (profile_id) => {
+    return profileService.getByIdGuest(profile_id);
+};
+exports.getByIdGuest = getByIdGuest;
+exports.getByIdGuest;
 const create = (payload) => __awaiter(void 0, void 0, void 0, function* () {
     return profileService.create(payload);
 });

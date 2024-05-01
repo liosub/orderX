@@ -55,6 +55,16 @@ profileRouter.get('/:id', authMiddleware_1.default, (req, res) => __awaiter(void
     const result = yield profileServiceImpl.getById(id);
     return res.status(200).send(result);
 }));
+profileRouter.post('/guest/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const id = Number(req.params.id);
+        const result = yield profileServiceImpl.getByIdGuest(id);
+        return res.status(200).send(result);
+    }
+    catch (error) {
+        res.status(400).json({ error: error });
+    }
+}));
 profileRouter.post('/createM', authMiddleware_1.default, upload_1.upload, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const payload = req.body;
     const files = req.files;

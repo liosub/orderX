@@ -9,7 +9,10 @@ export const getById = (id: number): Promise<ProfileOutput> => {
 export const getByEmail = (email: string): Promise<ProfileOutput> => {
     return profileService.getByEmail(email)
 }
-
+export const getByIdGuest = (profile_id: number): Promise<ProfileOutput> => {
+    return profileService.getByIdGuest(profile_id)
+}
+getByIdGuest
 export const create = async (payload: ProfileInput): Promise<ProfileOutput> => {
     return profileService.create(payload)
 }

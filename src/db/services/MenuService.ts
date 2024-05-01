@@ -1,6 +1,7 @@
 import Items, { ItemInput, ItemOutput ,ItemState} from "../models/Items"
 import dotenv from 'dotenv';
 import Menu, { MenuInput, MenuOutput } from "../models/Menu";
+import Profile from "../models/Profile";
 dotenv.config();
 
 function menuItemsFormatter(payload:any,images:any,menu_id:number):ItemInput[]{
@@ -91,7 +92,7 @@ export const getById = async (id: number): Promise<MenuOutput> => {
 
 export const getByProfileId = async (id: number): Promise<MenuOutput> => {
     const menu = await Menu.findOne({
-        where: {profile_id:id}
+        where: {profile_id:id},
     })
 
     if (!menu) {

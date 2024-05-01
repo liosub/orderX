@@ -1,9 +1,6 @@
 import Items, { ItemInput, ItemOutput } from "../models/Items"
 import dotenv from 'dotenv';
-import * as MenuService from './MenuServiceImpl'
 import Menu, { MenuInput } from "../models/Menu";
-import { Profile } from "../models";
-import { Op, Sequelize } from "sequelize";
 dotenv.config();
 
 export const create = async (payload: ItemInput): Promise<ItemOutput> => {
@@ -53,29 +50,21 @@ export const getAll = async (menu_id:number): Promise<ItemOutput[]> => {
     })
 }
 
-export const getAllForGuest = async (menu_id:number): Promise<ItemOutput[]> => {
+export const getAllForGuest = async (menu_id:number): Promise<any[]> => {
     try{
-    return  Items.findAll({
-        attributes:["sectionTitle","sectionDescription","item_id","title","description","image","price","itemState","additionalFields","allergens"],
+        return await Items.findAll({
+        attributes:["sectionTitle","sectionDescription","item_id","title","description","image","price","itemState","additionalFields","allergens","menu_id"],
         where: {
             menu_id:menu_id,
             itemState:1
         },
         include:[
             {
-                model: Menu,
-                attributes:["menuTitle","menuDetails","profile_id"],
-                include:[
-                    {
-                        model:Profile,
-                        attributes:["businessName","url"],
-                    }
-                ]
-            },
-      
-        ],
-        
-   })
+                model:Menu,
+                attributes:["menuTitle","menuDetails"],
+            }
+        ],      
+   });
 }
    catch(error){
     console.log(error);

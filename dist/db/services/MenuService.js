@@ -125,7 +125,7 @@ const getById = (id) => __awaiter(void 0, void 0, void 0, function* () {
 exports.getById = getById;
 const getByProfileId = (id) => __awaiter(void 0, void 0, void 0, function* () {
     const menu = yield Menu_1.default.findOne({
-        where: { profile_id: id }
+        where: { profile_id: id },
     });
     if (!menu) {
         //@todo throw custom error

@@ -4,6 +4,7 @@ import { ItemInput } from '../db/models/Items'
 import  { uploadItmes } from '../middleware/upload';
 import verifyToken from '../middleware/authMiddleware';
 import * as menuServiceImpl from '../db/services/MenuServiceImpl'
+import * as profileServiceImpl from '../db/services/ProfileServiceImpl'
 
 const itemsRouter = Router()
 
@@ -26,7 +27,8 @@ itemsRouter.post('/guest/:id',async (req: Request, res: Response) => {
     catch(error){
         return res.status(400).json({error:error});    
     }
-})
+});
+
 
 itemsRouter.get('/', verifyToken,async (req: Request, res: Response) => {
     try{

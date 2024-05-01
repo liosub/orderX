@@ -50,6 +50,24 @@ export const getById = async (id: number): Promise<ProfileOutput> => {
     return profile
 }
 
+export const getByIdGuest = async (profile_id: number): Promise<any> => {
+    try{
+        
+    const profile=await Profile.findOne({
+        where:{
+            profile_id:profile_id
+        },
+        attributes:["businessName","logo"]
+    });
+
+    return profile;
+    }
+    catch(error){
+        console.log(error);
+    }
+
+}
+
 export const update = async (id: number, payload: Partial<ProfileInput>): Promise<ProfileOutput> => {
     const profile = await Profile.findByPk(id)
 
@@ -70,7 +88,7 @@ export const createNewProfile = async (id: number, payload: Partial<ProfileInput
     }
     payload.profile_id=profile.profile_id;
     await qrCodeGenerator(payload);
-    payload.url = `${URI}/menu/${profile.profile_id}`;
+    payload.url = `${URI}/profile/${profile.profile_id}`;
     payload.QRCode = `${QR_URI}/${payload.QRCode}`;
     const updateProfile = await profile.update(payload);
     return updateProfile

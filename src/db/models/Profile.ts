@@ -1,5 +1,6 @@
 import { DataTypes, Model, Optional ,Sequelize,ModelAttributes} from 'sequelize'
 import Order from './Order';
+import Menu from './Menu';
 
 
 interface ProfileAttributes{

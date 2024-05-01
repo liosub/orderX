@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteById = exports.qrCodeGenerator = exports.createNewProfile = exports.update = exports.getById = exports.getByEmail = exports.findOrCreate = exports.create = void 0;
+exports.deleteById = exports.qrCodeGenerator = exports.createNewProfile = exports.update = exports.getByIdGuest = exports.getById = exports.getByEmail = exports.findOrCreate = exports.create = void 0;
 const Profile_1 = __importDefault(require("../models/Profile"));
 const dotenv_1 = __importDefault(require("dotenv"));
 const bcrypt_1 = __importDefault(require("bcrypt"));
@@ -61,6 +61,21 @@ const getById = (id) => __awaiter(void 0, void 0, void 0, function* () {
     return profile;
 });
 exports.getById = getById;
+const getByIdGuest = (profile_id) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const profile = yield Profile_1.default.findOne({
+            where: {
+                profile_id: profile_id
+            },
+            attributes: ["businessName", "logo"]
+        });
+        return profile;
+    }
+    catch (error) {
+        console.log(error);
+    }
+});
+exports.getByIdGuest = getByIdGuest;
 const update = (id, payload) => __awaiter(void 0, void 0, void 0, function* () {
     const profile = yield Profile_1.default.findByPk(id);
     if (!profile) {
@@ -78,7 +93,7 @@ const createNewProfile = (id, payload) => __awaiter(void 0, void 0, void 0, func
     }
     payload.profile_id = profile.profile_id;
     yield (0, exports.qrCodeGenerator)(payload);
-    payload.url = `${URI}/menu/${profile.profile_id}`;
+    payload.url = `${URI}/profile/${profile.profile_id}`;
     payload.QRCode = `${QR_URI}/${payload.QRCode}`;
     const updateProfile = yield profile.update(payload);
     return updateProfile;

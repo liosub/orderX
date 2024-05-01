@@ -23,6 +23,17 @@ profileRouter.get('/:id', verifyToken,async (req: Request, res: Response) => {
     return res.status(200).send(result)
 })
 
+profileRouter.post('/guest/:id',async (req: Request, res: Response) => {
+    try{
+    const id = Number(req.params.id)
+    const result = await profileServiceImpl.getByIdGuest(id)
+    return res.status(200).send(result);
+    } 
+   catch(error){
+    res.status(400).json({ error: error });
+}
+})
+
 
 profileRouter.post('/createM',verifyToken,upload, async (req: Request, res: Response) => {
     const payload:ProfileInput = req.body

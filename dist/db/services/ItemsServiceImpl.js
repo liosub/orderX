@@ -55,7 +55,7 @@ const getAllByMenuId = (menu_id) => __awaiter(void 0, void 0, void 0, function* 
 });
 exports.getAllByMenuId = getAllByMenuId;
 const getAllItemsByMenuId = (menu_id) => __awaiter(void 0, void 0, void 0, function* () {
-    return itemsService.getAllForGuest(menu_id);
+    return yield itemsService.getAllForGuest(menu_id);
 });
 exports.getAllItemsByMenuId = getAllItemsByMenuId;
 const deleteById = (id, itemsIds) => __awaiter(void 0, void 0, void 0, function* () {
