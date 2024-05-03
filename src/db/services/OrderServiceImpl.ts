@@ -13,16 +13,16 @@ export const getById = async (id: number): Promise<OrderOutput> => {
     return  orderService.getById(id)
 }
 
-export const getAll = async (): Promise<OrderOutput[]> => {
-    return  orderService.getAll()
+export const getAllOrdersByProfile = async (profile_id:number): Promise<OrderOutput[]> => {
+    return  orderService.getAllOrders(profile_id)
 }
 
 export const getAllOrderTable = async (): Promise<OrderOutput[]> => {
     return  orderService.getAllOrderTable()
 }
 
-export const getOrdersAnalyticsData = async (orderId:number): Promise<any[]> => {
-    return await orderService.getOrdersAnalyticsData(orderId)
+export const getOrdersAnalyticsData = async (profile_id:number): Promise<any[]> => {
+    return await orderService.getOrdersAnalyticsData(profile_id)
 }
 
 export const deleteById = async (id: number): Promise<boolean> => {

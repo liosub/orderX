@@ -51,10 +51,20 @@ const orderRouter = (0, express_1.Router)();
 //     return res.status(200).send(result)
 // })
 /**/
-orderRouter.get("/opt", authMiddleware_1.default, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+orderRouter.post("/analysis/total", authMiddleware_1.default, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const id = Number(req.token._id);
         const result = yield orderServiceImpl.getOrdersAnalyticsData(id);
+        return res.status(200).send(result);
+    }
+    catch (error) {
+        res.status(400).json({ error: error });
+    }
+}));
+orderRouter.post("/analysis/customerInfo", authMiddleware_1.default, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const id = Number(req.token._id);
+        const result = yield orderServiceImpl.getAllOrdersByProfile(id);
         return res.status(200).send(result);
     }
     catch (error) {

@@ -55,35 +55,30 @@ export const deleteById = async (id: number): Promise<boolean> => {
 
     return !!numDeleteditems
 }
-export const getAllOrderTable = async (): Promise<any[]> => {
+export const getAllMenuOrders = async (): Promise<any[]> => {
     return  Order.findAll({
         attributes:["order_id","customerName","roomNo","tableNo","revenue","createdAt"]
     });
 }
 
-export const getAll = async (): Promise<any[]> => {
+export const getAllOrders = async (profile_id:number): Promise<any[]> => {
     return  Order.findAll({
-        attributes:["order_id","email","roomNo","tableNo","revenue","createdAt","status","notes","profile_id",
-        // [Sequelize.fn("COUNT", Sequelize.col("*")), "orderCount"],
-        // [Sequelize.fn("SUM", Sequelize.col("revenue")), "orderSum"],
-
-    ],
+        attributes:["customerName","roomNo","tableNo","order_id","revenue","createdAt","notes","status","profile_id"],
         include: [
                 {
                   model: Profile,
-                },
-                {
-                    model: Items,
-                    as: "items"
-                },
+                }
               ],
-         order: ['profile_id']
+         order: ['profile_id'],
+         where:{
+            profile_id:profile_id
+         }
 }
     );
 }
 
-export const getOrdersAnalyticsData = async (orderId:number): Promise<any[]> => {
-    return Order.findAll({
+export const getOrdersAnalyticsData = async (profile_id:number): Promise<any[]> => {
+    return await Order.findAll({
             attributes: [
                 [Sequelize.fn("COUNT", Sequelize.col("*")), "orderCount"],
                 [Sequelize.fn("SUM", Sequelize.col("revenue")), "orderSum"],
@@ -91,9 +86,8 @@ export const getOrdersAnalyticsData = async (orderId:number): Promise<any[]> => 
              
             ],
             where:{
-                order_id:orderId
+                profile_id:profile_id
             },
-            // group: ['id']
   
     });
 }

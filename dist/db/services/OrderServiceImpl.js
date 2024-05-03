@@ -32,7 +32,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteById = exports.getOrdersAnalyticsData = exports.getAllOrderTable = exports.getAll = exports.getById = exports.update = exports.create = void 0;
+exports.deleteById = exports.getOrdersAnalyticsData = exports.getAllOrderTable = exports.getAllOrdersByProfile = exports.getById = exports.update = exports.create = void 0;
 const orderService = __importStar(require("./OrderService"));
 const create = (payload) => __awaiter(void 0, void 0, void 0, function* () {
     return orderService.create(payload);
@@ -46,16 +46,16 @@ const getById = (id) => __awaiter(void 0, void 0, void 0, function* () {
     return orderService.getById(id);
 });
 exports.getById = getById;
-const getAll = () => __awaiter(void 0, void 0, void 0, function* () {
-    return orderService.getAll();
+const getAllOrdersByProfile = (profile_id) => __awaiter(void 0, void 0, void 0, function* () {
+    return orderService.getAllOrders(profile_id);
 });
-exports.getAll = getAll;
+exports.getAllOrdersByProfile = getAllOrdersByProfile;
 const getAllOrderTable = () => __awaiter(void 0, void 0, void 0, function* () {
     return orderService.getAllOrderTable();
 });
 exports.getAllOrderTable = getAllOrderTable;
-const getOrdersAnalyticsData = (orderId) => __awaiter(void 0, void 0, void 0, function* () {
-    return yield orderService.getOrdersAnalyticsData(orderId);
+const getOrdersAnalyticsData = (profile_id) => __awaiter(void 0, void 0, void 0, function* () {
+    return yield orderService.getOrdersAnalyticsData(profile_id);
 });
 exports.getOrdersAnalyticsData = getOrdersAnalyticsData;
 const deleteById = (id) => __awaiter(void 0, void 0, void 0, function* () {

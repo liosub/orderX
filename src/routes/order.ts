@@ -22,7 +22,8 @@ const orderRouter = Router()
 // })
 /**/
 
-orderRouter.get("/opt", verifyToken,async (req: Request, res: Response) => {    
+
+orderRouter.post("/analysis/total", verifyToken,async (req: Request, res: Response) => {    
     try{
         const id = Number(req.token._id)
         const result = await orderServiceImpl.getOrdersAnalyticsData(id)
@@ -32,6 +33,19 @@ orderRouter.get("/opt", verifyToken,async (req: Request, res: Response) => {
         res.status(400).json({ error: error });
     }
 })
+
+
+orderRouter.post("/analysis/customerInfo", verifyToken,async (req: Request, res: Response) => {    
+    try{
+        const id = Number(req.token._id)
+        const result = await orderServiceImpl.getAllOrdersByProfile(id)
+        return res.status(200).send(result)
+    }
+    catch(error){
+        res.status(400).json({ error: error });
+    }
+})
+
 orderRouter.post('/', verifyToken,async (req: Request, res: Response) => {
     try{
         const profile_id = Number(req.token._id)
