@@ -36,6 +36,9 @@ module.exports = {
       price: {
         type: Sequelize.BIGINT,
       },
+      notes: {
+        type: DataTypes.STRING,
+    },
       createdAt: {
         defaultValue: Sequelize.NOW,
         type: Sequelize.DATE

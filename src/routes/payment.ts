@@ -2,16 +2,85 @@ import { Router, Request, Response } from 'express'
 import Stripe from 'stripe';
 import dotenv from 'dotenv';
 import verifyToken from '../middleware/authMiddleware';
-import bodyParser from 'body-parser';
 dotenv.config();
-
+const REACT_APP_STLLR_URL=process.env.REACT_APP_STLLR_URL as string;
 const STRIPE_SECRET_KEY = process.env.STRIPE_SECRET_KEY as string;
 const STRIPE_WEBHOOK_SECRET = process.env.STRIPE_SECRET_KEY as string;
-const stripe = new Stripe(STRIPE_SECRET_KEY);
+export const stripe = new Stripe(STRIPE_SECRET_KEY);
 
-const paymentRouter = Router()
+export async function createProducts(orderNo:number,total_price:number){
+  const product = await stripe.products.create({
+    name: orderNo.toString(),
+  });
+  const price = await stripe.prices.create
+  ({
+    product: product.id,
+    unit_amount: total_price,
+    currency: 'usd',
+    recurring: { 
+      interval: "day",
+    },
+  });
+  return price;
+}
 
-paymentRouter.post('/',verifyToken,async (req: Request, res: Response) => {
+
+export async function createStripeCustomer(email:string, name:string) {
+  try {
+    const customer = await stripe.customers.create({
+      email: email,
+      name: name,
+    });
+    return customer;
+  } catch (err) {
+    console.error(err);
+    return null;
+  }
+}
+
+function itemsFormatter(items:any[]){
+  const line_items:any=[];
+  items.forEach(it=>{
+    const itx=    {
+      price_data: {
+        product_data: {
+          name: it.item_title,
+        },
+        currency: "usd",
+        unit_amount: it.price*100,
+      },
+      quantity: it.counter,
+    };
+    line_items.push(itx);
+  });
+  return line_items;
+}
+export async function createSessions(items:any[]) {
+  try {
+    const itemsSession=itemsFormatter(items);
+    if(items.length <=0){
+      return;
+    } 
+    const session = await stripe.checkout.sessions.create({
+      line_items:itemsSession,
+      mode: "payment",
+      success_url: `${REACT_APP_STLLR_URL}/success`,
+      cancel_url: `${REACT_APP_STLLR_URL}/cancel`,
+    });
+
+    // console.log(session);
+    return session.url;
+  } catch (error) {
+    return error;
+  }
+}
+
+const paymentRouter = Router();
+
+paymentRouter.get('/',async (req: Request, res: Response) => {    
+    return res.status(200).send("result")
+})
+paymentRouter.post('/',async (req: Request, res: Response) => {
     const { amount, customerId } = req.body;  
 // 1 cents to charge $1.00 or 100 
     try {
@@ -38,29 +107,58 @@ paymentRouter.post('/',verifyToken,async (req: Request, res: Response) => {
     }
 });
 
-// paymentRouter.post('/webhook', async (req: Request, res: Response) => {
-//     const sig:any = req.headers['stripe-signature'];
-//     let event;
-  
-//     try {
-//       event = stripe.webhooks.constructEvent(req.body, sig, STRIPE_WEBHOOK_SECRET);
-//     } catch (err:any) {
-//       console.error('Error processing webhook:', err);
-//       res.status(400).send(`Webhook Error: ${err.message}`);
-//       return;
-//     }
-  
-//     switch (event.type) {
-//       case 'payment_intent.succeeded':
-//         const paymentIntent = event.data.object;
-//         break;
-//       case 'payment_intent.payment_failed':
-//         const paymentFailedIntent = event.data.object;
-//         break;
-//       default:
-//         console.log(`Unhandled event type ${event.type}`);
-//     }
-  
-//     res.status(200).end();
-//   });
-export default paymentRouter
+
+
+// paymentRouter.post("/sessions", async(req: Request, res: Response) => {
+  // try {
+  //   const { stripeCustomerId, priceId } = req.body;
+  //   const sessions = await stripe.checkout.sessions.create(
+  //     {
+  //       mode: "subscription",
+  //       payment_method_types: ["card"],
+  //       line_items: [
+  //         {
+  //           price: priceId,
+  //           quantity: 1,
+  //         },
+  //       ],
+  //       success_url: "<http://localhost:3000/subscription/success>",
+  //       cancel_url: "<http://localhost:3000/subscription/failed>",
+  //       customer: stripeCustomerId,
+  //     },
+  //     {
+  //       apiKey: STRIPE_SECRET_KEY,
+  //     }
+  //   );
+  //   res.status(201).send({ sessions });
+  // } catch (error) {
+  //   res.status(500).json({ error });
+  // }
+//  
+// });
+// [
+//   {
+//     price_data: {
+//       product_data: {
+//         name: "Laptop",
+//       },
+//       currency: "usd",
+//       unit_amount: 2000,
+//     },
+//     quantity: 1,
+//   },
+//   {
+//     price_data: {
+//       product_data: {
+//         name: "TV",
+//       },
+//       currency: "usd",
+//       unit_amount: 1000,
+//     },
+//     quantity: 2,
+//   },
+// ],
+
+
+export default paymentRouter;
+

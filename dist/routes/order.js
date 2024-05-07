@@ -39,6 +39,7 @@ const express_1 = require("express");
 const orderServiceImpl = __importStar(require("../db/services/OrderServiceImpl"));
 const authMiddleware_1 = __importDefault(require("../middleware/authMiddleware"));
 const orderItemServiceImpl = __importStar(require("../db/services/OrderItemService"));
+const payment_1 = require("./payment");
 const orderRouter = (0, express_1.Router)();
 // orderRouter.get('/:id', async (req: Request, res: Response) => {
 //     const id = Number(req.params.id)
@@ -64,6 +65,16 @@ orderRouter.post("/analysis/total", authMiddleware_1.default, (req, res) => __aw
 orderRouter.post("/analysis/customerInfo", authMiddleware_1.default, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const id = Number(req.token._id);
+        const result = yield orderServiceImpl.getAllCustomerOrders(id);
+        return res.status(200).send(result);
+    }
+    catch (error) {
+        res.status(400).json({ error: error });
+    }
+}));
+orderRouter.post("/analysis/profileInfo", authMiddleware_1.default, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const id = Number(req.token._id);
         const result = yield orderServiceImpl.getAllOrdersByProfile(id);
         return res.status(200).send(result);
     }
@@ -71,16 +82,18 @@ orderRouter.post("/analysis/customerInfo", authMiddleware_1.default, (req, res) 
         res.status(400).json({ error: error });
     }
 }));
-orderRouter.post('/', authMiddleware_1.default, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+orderRouter.post('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const profile_id = Number(req.token._id);
         const payload = req.body;
-        payload.profile_id = profile_id;
         const result = yield orderServiceImpl.create(payload);
-        const oderItems = yield orderItemServiceImpl.createMany(payload, result.order_id);
-        return res.status(200).send(result);
+        const oderItems = yield orderItemServiceImpl.createMany(payload.cart, result.order_id);
+        // const priceId =await createProducts(result.order_id,payload.total_price);
+        // const customerId =await createStripeCustomer("lol@mail.com","lol");
+        const sessionUrl = yield (0, payment_1.createSessions)(payload.cart);
+        return res.status(200).send({ sessionUrl });
     }
     catch (error) {
+        console.log(error);
         res.status(400).json({ error: error });
     }
 }));

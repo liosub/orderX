@@ -32,7 +32,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteById = exports.getOrdersAnalyticsData = exports.getAllOrderTable = exports.getAllOrdersByProfile = exports.getById = exports.update = exports.create = void 0;
+exports.deleteById = exports.getOrdersAnalyticsData = exports.getAllCustomerOrders = exports.getAllOrdersByProfile = exports.getById = exports.update = exports.create = void 0;
 const orderService = __importStar(require("./OrderService"));
 const create = (payload) => __awaiter(void 0, void 0, void 0, function* () {
     return orderService.create(payload);
@@ -47,13 +47,13 @@ const getById = (id) => __awaiter(void 0, void 0, void 0, function* () {
 });
 exports.getById = getById;
 const getAllOrdersByProfile = (profile_id) => __awaiter(void 0, void 0, void 0, function* () {
-    return orderService.getAllOrders(profile_id);
+    return orderService.getAllOrdersByProfile(profile_id);
 });
 exports.getAllOrdersByProfile = getAllOrdersByProfile;
-const getAllOrderTable = () => __awaiter(void 0, void 0, void 0, function* () {
-    return orderService.getAllOrderTable();
+const getAllCustomerOrders = (profile_id) => __awaiter(void 0, void 0, void 0, function* () {
+    return orderService.getAllMenuOrders(profile_id);
 });
-exports.getAllOrderTable = getAllOrderTable;
+exports.getAllCustomerOrders = getAllCustomerOrders;
 const getOrdersAnalyticsData = (profile_id) => __awaiter(void 0, void 0, void 0, function* () {
     return yield orderService.getOrdersAnalyticsData(profile_id);
 });

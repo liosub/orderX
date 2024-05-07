@@ -22,6 +22,7 @@ function orderFormatter(items, order_id) {
             item_id: items[i].item_id,
             quantity: items[i].counter,
             price: items[i].price,
+            notes: items[i].notes
         };
         orderItems.push(orderItem);
     }

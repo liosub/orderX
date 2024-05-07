@@ -19,6 +19,9 @@ exports.ORDER_ITEM_MODEL = {
     },
     price: {
         type: sequelize_1.DataTypes.BIGINT,
+    },
+    notes: {
+        type: sequelize_1.DataTypes.STRING,
     }
 };
 class OrderItems extends sequelize_1.Model {

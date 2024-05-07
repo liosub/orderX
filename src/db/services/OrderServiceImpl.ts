@@ -14,11 +14,11 @@ export const getById = async (id: number): Promise<OrderOutput> => {
 }
 
 export const getAllOrdersByProfile = async (profile_id:number): Promise<OrderOutput[]> => {
-    return  orderService.getAllOrders(profile_id)
+    return  orderService.getAllOrdersByProfile(profile_id)
 }
 
-export const getAllOrderTable = async (): Promise<OrderOutput[]> => {
-    return  orderService.getAllOrderTable()
+export const getAllCustomerOrders = async (profile_id:number): Promise<OrderOutput[]> => {
+    return  orderService.getAllMenuOrders(profile_id)
 }
 
 export const getOrdersAnalyticsData = async (profile_id:number): Promise<any[]> => {

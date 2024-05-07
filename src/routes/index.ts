@@ -15,6 +15,6 @@ router.use('/menu',menuRouter);
 router.use('/items',itemsRouter);
 router.use('/orders',orderRouter);
 router.use('/orderItems',orderItemRouter);
-router.use('/payment',paymentRouter);
+router.use('/payments',paymentRouter);
 
 export default router

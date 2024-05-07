@@ -4,6 +4,7 @@ import { OrderInput } from '../db/models/Order'
 import verifyToken from '../middleware/authMiddleware'
 import * as orderItemServiceImpl from '../db/services/OrderItemService'
 import { OrderItemsInput } from '../db/models/OrderItems'
+import { createProducts, createSessions, createStripeCustomer } from './payment'
 
 const orderRouter = Router()
 
@@ -38,7 +39,7 @@ orderRouter.post("/analysis/total", verifyToken,async (req: Request, res: Respon
 orderRouter.post("/analysis/customerInfo", verifyToken,async (req: Request, res: Response) => {    
     try{
         const id = Number(req.token._id)
-        const result = await orderServiceImpl.getAllOrdersByProfile(id)
+        const result = await orderServiceImpl.getAllCustomerOrders(id)
         return res.status(200).send(result)
     }
     catch(error){
@@ -46,16 +47,28 @@ orderRouter.post("/analysis/customerInfo", verifyToken,async (req: Request, res:
     }
 })
 
-orderRouter.post('/', verifyToken,async (req: Request, res: Response) => {
+orderRouter.post("/analysis/profileInfo", verifyToken,async (req: Request, res: Response) => {    
     try{
-        const profile_id = Number(req.token._id)
-        const payload:any= req.body;
-        payload.profile_id=profile_id;
-        const result = await orderServiceImpl.create(payload);
-        const oderItems = await orderItemServiceImpl.createMany(payload,result.order_id);
-        return res.status(200).send(result);    
+        const id = Number(req.token._id)
+        const result = await orderServiceImpl.getAllOrdersByProfile(id)
+        return res.status(200).send(result)
     }
     catch(error){
+        res.status(400).json({ error: error });
+    }
+})
+orderRouter.post('/',async (req: Request, res: Response) => {
+    try{
+        const payload:any= req.body;
+        const result = await orderServiceImpl.create(payload);
+        const oderItems = await orderItemServiceImpl.createMany(payload.cart,result.order_id);
+        // const priceId =await createProducts(result.order_id,payload.total_price);
+        // const customerId =await createStripeCustomer("lol@mail.com","lol");
+        const sessionUrl= await createSessions(payload.cart);
+        return res.status(200).send({sessionUrl});    
+    }
+    catch(error){
+        console.log(error);
         res.status(400).json({ error: error });
     }
 })

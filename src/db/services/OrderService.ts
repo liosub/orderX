@@ -1,25 +1,25 @@
 import { Sequelize } from "sequelize";
 import Items,{ ItemOutput } from "../models/Items";
 import Order, { OrderInput, OrderOutput } from "../models/Order"
-import { Profile } from "../models";
+import { Menu, Profile } from "../models";
 
 const orderStatus = ["Processing","Canceled","Done","Pending"];
 
-function getRevenue(items:any):Number{
+function getRevenue(items:any,total_price:number):Number{
     let revenue=0;
     items.forEach((it:any) =>{
-        revenue+=it.price
+        revenue+=(it.price* it.counter)
     })
-    return revenue;
+    return (revenue>total_price)? revenue:total_price;
 }
 
 export const create = async (payload: any): Promise<OrderOutput> => {
     const order:any={
-        profile_id:payload.profile_id,
-        menu_id:payload.menu_id,
+        profile_id:payload.profileId,
+        menu_id:payload.menuId,
         customerName:"",
-        notes:payload.notes,
-        revenue:getRevenue(payload),
+        notes:payload.public_notes,
+        revenue:getRevenue(payload.cart,payload.total_price),
         email:"",
         status:orderStatus[0]
     };
@@ -55,19 +55,26 @@ export const deleteById = async (id: number): Promise<boolean> => {
 
     return !!numDeleteditems
 }
-export const getAllMenuOrders = async (): Promise<any[]> => {
+export const getAllMenuOrders = async (profile_id:number): Promise<any[]> => {
     return  Order.findAll({
-        attributes:["order_id","customerName","roomNo","tableNo","revenue","createdAt"]
+        attributes:["order_id","customerName","roomNo","tableNo","revenue","createdAt"],
+        where:{
+            profile_id:profile_id
+        }
     });
 }
 
-export const getAllOrders = async (profile_id:number): Promise<any[]> => {
+export const getAllOrdersByProfile = async (profile_id:number): Promise<any[]> => {
     return  Order.findAll({
-        attributes:["customerName","roomNo","tableNo","order_id","revenue","createdAt","notes","status","profile_id"],
+        attributes:[
+            [Sequelize.fn("COUNT", Sequelize.col("*")), "orders"],
+            [Sequelize.fn("SUM", Sequelize.col("revenue")), "revenue"],
+        ],
         include: [
                 {
                   model: Profile,
-                }
+                  attributes:["businessName","url","email"]
+                },
               ],
          order: ['profile_id'],
          where:{

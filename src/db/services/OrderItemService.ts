@@ -8,6 +8,7 @@ function orderFormatter(items:any,order_id:number):OrderItemsInput[]{
             item_id:items[i].item_id,
             quantity:items[i].counter,
             price:items[i].price,
+            notes:items[i].notes
         };
         orderItems.push(orderItem);
   }

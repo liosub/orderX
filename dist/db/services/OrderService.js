@@ -12,26 +12,25 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getOrdersAnalyticsData = exports.getAllOrders = exports.getAllOrderTable = exports.deleteById = exports.update = exports.getById = exports.create = void 0;
+exports.getOrdersAnalyticsData = exports.getAllOrdersByProfile = exports.getAllMenuOrders = exports.deleteById = exports.update = exports.getById = exports.create = void 0;
 const sequelize_1 = require("sequelize");
-const Items_1 = __importDefault(require("../models/Items"));
 const Order_1 = __importDefault(require("../models/Order"));
 const models_1 = require("../models");
 const orderStatus = ["Processing", "Canceled", "Done", "Pending"];
-function getRevenue(items) {
+function getRevenue(items, total_price) {
     let revenue = 0;
     items.forEach((it) => {
-        revenue += it.price;
+        revenue += (it.price * it.counter);
     });
-    return revenue;
+    return (revenue > total_price) ? revenue : total_price;
 }
 const create = (payload) => __awaiter(void 0, void 0, void 0, function* () {
     const order = {
-        profile_id: payload.profile_id,
-        menu_id: payload.menu_id,
+        profile_id: payload.profileId,
+        menu_id: payload.menuId,
         customerName: "",
-        notes: payload.notes,
-        revenue: getRevenue(payload),
+        notes: payload.public_notes,
+        revenue: getRevenue(payload.cart, payload.total_price),
         email: "",
         status: orderStatus[0]
     };
@@ -63,23 +62,25 @@ const deleteById = (id) => __awaiter(void 0, void 0, void 0, function* () {
     return !!numDeleteditems;
 });
 exports.deleteById = deleteById;
-const getAllOrderTable = () => __awaiter(void 0, void 0, void 0, function* () {
+const getAllMenuOrders = (profile_id) => __awaiter(void 0, void 0, void 0, function* () {
     return Order_1.default.findAll({
-        attributes: ["order_id", "customerName", "roomNo", "tableNo", "revenue", "createdAt"]
+        attributes: ["order_id", "customerName", "roomNo", "tableNo", "revenue", "createdAt"],
+        where: {
+            profile_id: profile_id
+        }
     });
 });
-exports.getAllOrderTable = getAllOrderTable;
-const getAllOrders = (profile_id) => __awaiter(void 0, void 0, void 0, function* () {
+exports.getAllMenuOrders = getAllMenuOrders;
+const getAllOrdersByProfile = (profile_id) => __awaiter(void 0, void 0, void 0, function* () {
     return Order_1.default.findAll({
-        attributes: ["customerName", "roomNo", "tableNo", "order_id", "revenue", "createdAt", "notes", "status", "profile_id",
+        attributes: [
+            [sequelize_1.Sequelize.fn("COUNT", sequelize_1.Sequelize.col("*")), "orders"],
+            [sequelize_1.Sequelize.fn("SUM", sequelize_1.Sequelize.col("revenue")), "revenue"],
         ],
         include: [
             {
                 model: models_1.Profile,
-            },
-            {
-                model: Items_1.default,
-                as: "items"
+                attributes: ["businessName", "url", "email"]
             },
         ],
         order: ['profile_id'],
@@ -88,7 +89,7 @@ const getAllOrders = (profile_id) => __awaiter(void 0, void 0, void 0, function*
         }
     });
 });
-exports.getAllOrders = getAllOrders;
+exports.getAllOrdersByProfile = getAllOrdersByProfile;
 const getOrdersAnalyticsData = (profile_id) => __awaiter(void 0, void 0, void 0, function* () {
     return yield Order_1.default.findAll({
         attributes: [

@@ -18,5 +18,5 @@ router.use('/menu', menu_1.default);
 router.use('/items', items_1.default);
 router.use('/orders', order_1.default);
 router.use('/orderItems', orderitems_1.default);
-router.use('/payment', payment_1.default);
+router.use('/payments', payment_1.default);
 exports.default = router;
