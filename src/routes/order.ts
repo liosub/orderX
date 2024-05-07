@@ -21,7 +21,9 @@ const orderRouter = Router()
 //     // getAllOrderTable()
 //     return res.status(200).send(result)
 // })
-/**/
+/**/    // const priceId =await createProducts(result.order_id,payload.total_price);
+        // const customerId =await createStripeCustomer("lol@mail.com","lol");
+    
 
 
 orderRouter.post("/analysis/total", verifyToken,async (req: Request, res: Response) => {    
@@ -60,12 +62,14 @@ orderRouter.post("/analysis/profileInfo", verifyToken,async (req: Request, res: 
 orderRouter.post('/',async (req: Request, res: Response) => {
     try{
         const payload:any= req.body;
-        const result = await orderServiceImpl.create(payload);
-        const oderItems = await orderItemServiceImpl.createMany(payload.cart,result.order_id);
-        // const priceId =await createProducts(result.order_id,payload.total_price);
-        // const customerId =await createStripeCustomer("lol@mail.com","lol");
-        const sessionUrl= await createSessions(payload.cart);
-        return res.status(200).send({sessionUrl});    
+        const session:any= await createSessions(payload.cart,payload.customer_email);
+        if(session.id && session.url){
+            payload.orderDetails=session.id;
+            const result = await orderServiceImpl.create(payload);
+            const oderItems = await orderItemServiceImpl.createMany(payload.cart,result.order_id);   
+            return res.status(200).send(session.url);    
+        }
+        res.status(400).json({ error: "failed process" });
     }
     catch(error){
         console.log(error);

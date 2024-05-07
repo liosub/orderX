@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getOrdersAnalyticsData = exports.getAllOrdersByProfile = exports.getAllMenuOrders = exports.deleteById = exports.update = exports.getById = exports.create = void 0;
+exports.getOrdersAnalyticsData = exports.getAllOrdersByProfile = exports.getAllMenuOrders = exports.deleteById = exports.update = exports.getByOrderDetails = exports.getById = exports.create = void 0;
 const sequelize_1 = require("sequelize");
 const Order_1 = __importDefault(require("../models/Order"));
 const models_1 = require("../models");
@@ -47,6 +47,22 @@ const getById = (id) => __awaiter(void 0, void 0, void 0, function* () {
     return order;
 });
 exports.getById = getById;
+// 
+const getByOrderDetails = (orderDetails) => __awaiter(void 0, void 0, void 0, function* () {
+    const order = yield Order_1.default.findOne({
+        where: {
+            orderDetails: orderDetails
+        },
+        include: [
+            {
+                model: models_1.Profile,
+                attributes: ["email"]
+            },
+        ]
+    });
+    return order;
+});
+exports.getByOrderDetails = getByOrderDetails;
 const update = (id, payload) => __awaiter(void 0, void 0, void 0, function* () {
     const order = yield Order_1.default.findByPk(id);
     if (!order) {

@@ -20,6 +20,7 @@ dotenv_1.default.config();
 const REACT_APP_STLLR_URL = process.env.REACT_APP_STLLR_URL;
 const STRIPE_SECRET_KEY = process.env.STRIPE_SECRET_KEY;
 const STRIPE_WEBHOOK_SECRET = process.env.STRIPE_SECRET_KEY;
+let paymentIds = new Map();
 exports.stripe = new stripe_1.default(STRIPE_SECRET_KEY);
 function createProducts(orderNo, total_price) {
     return __awaiter(this, void 0, void 0, function* () {
@@ -71,7 +72,7 @@ function itemsFormatter(items) {
     });
     return line_items;
 }
-function createSessions(items) {
+function createSessions(items, profileMail) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             const itemsSession = itemsFormatter(items);
@@ -81,11 +82,11 @@ function createSessions(items) {
             const session = yield exports.stripe.checkout.sessions.create({
                 line_items: itemsSession,
                 mode: "payment",
+                customer_email: profileMail,
                 success_url: `${REACT_APP_STLLR_URL}/success`,
                 cancel_url: `${REACT_APP_STLLR_URL}/cancel`,
             });
-            // console.log(session);
-            return session.url;
+            return session;
         }
         catch (error) {
             return error;
@@ -99,7 +100,6 @@ paymentRouter.get('/', (req, res) => __awaiter(void 0, void 0, void 0, function*
 }));
 paymentRouter.post('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { amount, customerId } = req.body;
-    // 1 cents to charge $1.00 or 100 
     try {
         const charge = yield exports.stripe.paymentIntents.create({
             amount: amount,
@@ -121,7 +121,31 @@ paymentRouter.post('/', (req, res) => __awaiter(void 0, void 0, void 0, function
         res.status(500).send(message);
     }
 }));
-// paymentRouter.post("/sessions", async(req: Request, res: Response) => {
+paymentRouter.post("/webhooks", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a;
+    try {
+        const event = req.body;
+        console.log(event);
+        switch (event.type) {
+            case 'charge.succeeded':
+                const paymentIntent = event.data.object;
+                console.log(paymentIntent === null || paymentIntent === void 0 ? void 0 : paymentIntent.receipt_url, (_a = paymentIntent === null || paymentIntent === void 0 ? void 0 : paymentIntent.billing_details) === null || _a === void 0 ? void 0 : _a.email, 'xxxx');
+                break;
+            case 'checkout.session.completed':
+                const completedPayment = event.data.object;
+                // const oder = await orderServiceImpl.getByOrderDetails(completedPayment.id);
+                break;
+            default:
+                console.log(`Unhandled event type ${event.type}`);
+        }
+        res.status(201).send({ event });
+    }
+    catch (error) {
+        res.status(500).json({ error });
+    }
+}));
+exports.default = paymentRouter;
+// }// paymentRouter.post("/sessions", async(req: Request, res: Response) => {
 // try {
 //   const { stripeCustomerId, priceId } = req.body;
 //   const sessions = await stripe.checkout.sessions.create(
@@ -170,4 +194,3 @@ paymentRouter.post('/', (req, res) => __awaiter(void 0, void 0, void 0, function
 //     quantity: 2,
 //   },
 // ],
-exports.default = paymentRouter;

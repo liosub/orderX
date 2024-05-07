@@ -51,7 +51,8 @@ const orderRouter = (0, express_1.Router)();
 //     // getAllOrderTable()
 //     return res.status(200).send(result)
 // })
-/**/
+/**/ // const priceId =await createProducts(result.order_id,payload.total_price);
+// const customerId =await createStripeCustomer("lol@mail.com","lol");
 orderRouter.post("/analysis/total", authMiddleware_1.default, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const id = Number(req.token._id);
@@ -85,12 +86,14 @@ orderRouter.post("/analysis/profileInfo", authMiddleware_1.default, (req, res) =
 orderRouter.post('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const payload = req.body;
-        const result = yield orderServiceImpl.create(payload);
-        const oderItems = yield orderItemServiceImpl.createMany(payload.cart, result.order_id);
-        // const priceId =await createProducts(result.order_id,payload.total_price);
-        // const customerId =await createStripeCustomer("lol@mail.com","lol");
-        const sessionUrl = yield (0, payment_1.createSessions)(payload.cart);
-        return res.status(200).send({ sessionUrl });
+        const session = yield (0, payment_1.createSessions)(payload.cart, payload.customer_email);
+        if (session.id && session.url) {
+            payload.orderDetails = session.id;
+            const result = yield orderServiceImpl.create(payload);
+            const oderItems = yield orderItemServiceImpl.createMany(payload.cart, result.order_id);
+            return res.status(200).send(session.url);
+        }
+        res.status(400).json({ error: "failed process" });
     }
     catch (error) {
         console.log(error);

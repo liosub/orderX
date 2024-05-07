@@ -13,6 +13,10 @@ export const getById = async (id: number): Promise<OrderOutput> => {
     return  orderService.getById(id)
 }
 
+export const getByOrderDetails = async (orderDetails: string): Promise<OrderOutput> => {
+    return  orderService.getByOrderDetails(orderDetails)
+}
+
 export const getAllOrdersByProfile = async (profile_id:number): Promise<OrderOutput[]> => {
     return  orderService.getAllOrdersByProfile(profile_id)
 }

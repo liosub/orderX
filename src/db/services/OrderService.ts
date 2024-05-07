@@ -37,6 +37,22 @@ export const getById = async (id: number): Promise<OrderOutput> => {
 
     return order
 }
+// 
+
+export const getByOrderDetails = async (orderDetails: string): Promise<any> => {
+    const order = await Order.findOne({
+        where:{
+            orderDetails:orderDetails
+        },
+        include:[
+            {
+                model: Profile,
+                attributes:["email"]
+              },
+        ]
+    })
+    return order;
+}
 
 export const update = async (id: number, payload: Partial<Order>): Promise<OrderOutput> => {
     const order = await Order.findByPk(id)
