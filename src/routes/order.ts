@@ -62,7 +62,7 @@ orderRouter.post("/analysis/profileInfo", verifyToken,async (req: Request, res: 
 orderRouter.post('/',async (req: Request, res: Response) => {
     try{
         const payload:any= req.body;
-        const session:any= await createSessions(payload.cart,payload.customer_email);
+        const session:any= await createSessions(payload.cart,payload.profilemail);
         if(session.id && session.url){
             payload.orderDetails=session.id;
             const result = await orderServiceImpl.create(payload);

@@ -16,6 +16,7 @@ exports.createSessions = exports.createStripeCustomer = exports.createProducts =
 const express_1 = require("express");
 const stripe_1 = __importDefault(require("stripe"));
 const dotenv_1 = __importDefault(require("dotenv"));
+const mailProvider_1 = require("../middleware/mailProvider");
 dotenv_1.default.config();
 const REACT_APP_STLLR_URL = process.env.REACT_APP_STLLR_URL;
 const STRIPE_SECRET_KEY = process.env.STRIPE_SECRET_KEY;
@@ -122,18 +123,18 @@ paymentRouter.post('/', (req, res) => __awaiter(void 0, void 0, void 0, function
     }
 }));
 paymentRouter.post("/webhooks", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    var _a;
+    var _a, _b;
     try {
         const event = req.body;
-        console.log(event);
+        // console.log(event);
         switch (event.type) {
             case 'charge.succeeded':
                 const paymentIntent = event.data.object;
-                console.log(paymentIntent === null || paymentIntent === void 0 ? void 0 : paymentIntent.receipt_url, (_a = paymentIntent === null || paymentIntent === void 0 ? void 0 : paymentIntent.billing_details) === null || _a === void 0 ? void 0 : _a.email, 'xxxx');
+                const mail = yield (0, mailProvider_1.sendMail)((_a = paymentIntent === null || paymentIntent === void 0 ? void 0 : paymentIntent.billing_details) === null || _a === void 0 ? void 0 : _a.email, paymentIntent === null || paymentIntent === void 0 ? void 0 : paymentIntent.receipt_url);
+                console.log(paymentIntent === null || paymentIntent === void 0 ? void 0 : paymentIntent.receipt_url, (_b = paymentIntent === null || paymentIntent === void 0 ? void 0 : paymentIntent.billing_details) === null || _b === void 0 ? void 0 : _b.email, mail, 'xxxx');
                 break;
             case 'checkout.session.completed':
                 const completedPayment = event.data.object;
-                // const oder = await orderServiceImpl.getByOrderDetails(completedPayment.id);
                 break;
             default:
                 console.log(`Unhandled event type ${event.type}`);

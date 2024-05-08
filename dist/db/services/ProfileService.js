@@ -67,7 +67,7 @@ const getByIdGuest = (profile_id) => __awaiter(void 0, void 0, void 0, function*
             where: {
                 profile_id: profile_id
             },
-            attributes: ["businessName", "logo"]
+            attributes: ["businessName", "logo", "email"]
         });
         return profile;
     }

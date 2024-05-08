@@ -86,7 +86,7 @@ orderRouter.post("/analysis/profileInfo", authMiddleware_1.default, (req, res) =
 orderRouter.post('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const payload = req.body;
-        const session = yield (0, payment_1.createSessions)(payload.cart, payload.customer_email);
+        const session = yield (0, payment_1.createSessions)(payload.cart, payload.profilemail);
         if (session.id && session.url) {
             payload.orderDetails = session.id;
             const result = yield orderServiceImpl.create(payload);

@@ -57,7 +57,7 @@ export const getByIdGuest = async (profile_id: number): Promise<any> => {
         where:{
             profile_id:profile_id
         },
-        attributes:["businessName","logo"]
+        attributes:["businessName","logo","email"]
     });
 
     return profile;

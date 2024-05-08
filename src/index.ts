@@ -6,7 +6,6 @@ import cors from 'cors';
 
 import routes from './routes';
 import dbInit from './db/init'
-import path from "path";
 
 dotenv.config();
 const port = process.env.PORT;

@@ -1,9 +1,8 @@
 import { Router, Request, Response } from 'express'
 import Stripe from 'stripe';
 import dotenv from 'dotenv';
-import * as orderServiceImpl from '../db/services/OrderServiceImpl'
+import { sendMail } from '../middleware/mailProvider';
 
-import verifyToken from '../middleware/authMiddleware';
 dotenv.config();
 const REACT_APP_STLLR_URL=process.env.REACT_APP_STLLR_URL as string;
 const STRIPE_SECRET_KEY = process.env.STRIPE_SECRET_KEY as string;
@@ -112,15 +111,15 @@ paymentRouter.post('/',async (req: Request, res: Response) => {
 paymentRouter.post("/webhooks", async (req: Request, res: Response) => {
   try {
     const event = req.body;
-    console.log(event);
+    // console.log(event);
     switch (event.type) {
       case 'charge.succeeded':
         const paymentIntent = event.data.object;
-        console.log(paymentIntent?.receipt_url,paymentIntent?.billing_details?.email,'xxxx')
+        const mail = await sendMail(paymentIntent?.billing_details?.email,paymentIntent?.receipt_url);
+        console.log(paymentIntent?.receipt_url,paymentIntent?.billing_details?.email,mail,'xxxx')
         break;
       case 'checkout.session.completed':
         const completedPayment = event.data.object;
-        // const oder = await orderServiceImpl.getByOrderDetails(completedPayment.id);
         break;
       default:
         console.log(`Unhandled event type ${event.type}`);
