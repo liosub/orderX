@@ -26,8 +26,9 @@ function sendMail(recepient, text) {
         const mailOptions = {
             from: 'mlio6070@outlook.com',
             to: recepient,
-            subject: 'Payment Mail',
-            text: text + "LOL",
+            subject: 'Payment Status',
+            text: text,
+            //   html:text
         };
         // Send the email
         transporter.sendMail(mailOptions, (error, info) => {

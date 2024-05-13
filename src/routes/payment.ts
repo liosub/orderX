@@ -58,7 +58,7 @@ function itemsFormatter(items:any[]){
   });
   return line_items;
 }
-export async function createSessions(items:any[],profileMail:string) {
+export async function createSessions(items:any[],profileId:number,profileMail:string) {
   try {
     const itemsSession=itemsFormatter(items);
     if(items.length <=0){
@@ -68,8 +68,8 @@ export async function createSessions(items:any[],profileMail:string) {
       line_items:itemsSession,
       mode: "payment",
       customer_email:profileMail,
-      success_url: `${REACT_APP_STLLR_URL}/success`,
-      cancel_url: `${REACT_APP_STLLR_URL}/cancel`,
+      success_url: `${REACT_APP_STLLR_URL}/success/${profileId}`,
+      cancel_url: `${REACT_APP_STLLR_URL}/cancel/${profileId}`,
     });
     return session;
   } catch (error) {
@@ -127,6 +127,7 @@ paymentRouter.post("/webhooks", async (req: Request, res: Response) => {
       res.status(201).send({ event });
 
   } catch (error) {
+    // const mail = await sendMail(paymentIntent?.billing_details?.email,paymentIntent?.receipt_url);
     res.status(500).json({ error });
   }
 });
