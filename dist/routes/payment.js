@@ -126,7 +126,6 @@ paymentRouter.post("/webhooks", (req, res) => __awaiter(void 0, void 0, void 0, 
     var _a, _b;
     try {
         const event = req.body;
-        // console.log(event);
         switch (event.type) {
             case 'charge.succeeded':
                 const paymentIntent = event.data.object;

@@ -2,6 +2,7 @@ import { Router, Request, Response } from 'express'
 import Stripe from 'stripe';
 import dotenv from 'dotenv';
 import { sendMail } from '../middleware/mailProvider';
+import { updateByEmail } from '../db/services/OrderServiceImpl';
 
 dotenv.config();
 const REACT_APP_STLLR_URL=process.env.REACT_APP_STLLR_URL as string;
@@ -111,12 +112,11 @@ paymentRouter.post('/',async (req: Request, res: Response) => {
 paymentRouter.post("/webhooks", async (req: Request, res: Response) => {
   try {
     const event = req.body;
-    // console.log(event);
     switch (event.type) {
       case 'charge.succeeded':
         const paymentIntent = event.data.object;
         const mail = await sendMail(paymentIntent?.billing_details?.email,paymentIntent?.receipt_url);
-        console.log(paymentIntent?.receipt_url,paymentIntent?.billing_details?.email,mail,'xxxx')
+         console.log(paymentIntent?.receipt_url,paymentIntent?.billing_details?.email,mail,'xxxx')
         break;
       case 'checkout.session.completed':
         const completedPayment = event.data.object;

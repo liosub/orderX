@@ -32,7 +32,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteById = exports.getOrdersAnalyticsData = exports.getAllCustomerOrders = exports.getAllOrdersByProfile = exports.getByOrderDetails = exports.getById = exports.update = exports.create = void 0;
+exports.deleteById = exports.getOrdersAnalyticsData = exports.getAllCustomerOrders = exports.getAllOrdersByProfile = exports.getByOrderDetails = exports.getById = exports.updateByEmail = exports.update = exports.create = void 0;
 const orderService = __importStar(require("./OrderService"));
 const create = (payload) => __awaiter(void 0, void 0, void 0, function* () {
     return orderService.create(payload);
@@ -42,6 +42,10 @@ const update = (id, payload) => __awaiter(void 0, void 0, void 0, function* () {
     return orderService.update(id, payload);
 });
 exports.update = update;
+const updateByEmail = (email, payload) => __awaiter(void 0, void 0, void 0, function* () {
+    return orderService.updateByEmail(email, payload);
+});
+exports.updateByEmail = updateByEmail;
 const getById = (id) => __awaiter(void 0, void 0, void 0, function* () {
     return orderService.getById(id);
 });

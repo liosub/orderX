@@ -21,7 +21,7 @@ export const create = async (payload: any): Promise<OrderOutput> => {
         notes:payload.public_notes,
         revenue:getRevenue(payload.cart,payload.total_price),
         email:"",
-        status:orderStatus[0]
+        status:orderStatus[2]
     };
     const newOrder:OrderOutput = await Order.create(order as OrderInput);
     return newOrder;
@@ -52,6 +52,19 @@ export const getByOrderDetails = async (orderDetails: string): Promise<any> => {
         ]
     })
     return order;
+}
+export const updateByEmail = async (email: string, payload: Partial<Order>): Promise<OrderOutput> => {
+    const order = await Order.findOne({
+        where:{
+            email:email
+        }
+    })
+
+    if (!order) {
+        throw new Error('not found')
+    }
+
+    return order.update(payload);
 }
 
 export const update = async (id: number, payload: Partial<Order>): Promise<OrderOutput> => {
