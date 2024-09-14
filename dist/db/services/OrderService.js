@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getOrdersAnalyticsData = exports.getAllOrdersByProfile = exports.getAllMenuOrders = exports.deleteById = exports.update = exports.getByOrderDetails = exports.getById = exports.create = void 0;
+exports.getOrdersAnalyticsData = exports.getAllOrdersByProfile = exports.getAllMenuOrders = exports.deleteById = exports.update = exports.updateByEmail = exports.getByOrderDetails = exports.getById = exports.create = void 0;
 const sequelize_1 = require("sequelize");
 const Order_1 = __importDefault(require("../models/Order"));
 const models_1 = require("../models");
@@ -32,7 +32,7 @@ const create = (payload) => __awaiter(void 0, void 0, void 0, function* () {
         notes: payload.public_notes,
         revenue: getRevenue(payload.cart, payload.total_price),
         email: "",
-        status: orderStatus[0]
+        status: orderStatus[2]
     };
     const newOrder = yield Order_1.default.create(order);
     return newOrder;
@@ -63,6 +63,18 @@ const getByOrderDetails = (orderDetails) => __awaiter(void 0, void 0, void 0, fu
     return order;
 });
 exports.getByOrderDetails = getByOrderDetails;
+const updateByEmail = (email, payload) => __awaiter(void 0, void 0, void 0, function* () {
+    const order = yield Order_1.default.findOne({
+        where: {
+            email: email
+        }
+    });
+    if (!order) {
+        throw new Error('not found');
+    }
+    return order.update(payload);
+});
+exports.updateByEmail = updateByEmail;
 const update = (id, payload) => __awaiter(void 0, void 0, void 0, function* () {
     const order = yield Order_1.default.findByPk(id);
     if (!order) {

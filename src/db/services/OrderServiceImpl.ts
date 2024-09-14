@@ -8,6 +8,9 @@ export const create = async (payload: any): Promise<OrderOutput> => {
 export const update = async (id: number, payload: Partial<OrderInput>): Promise<OrderOutput> => {
     return  orderService.update(id, payload)
 }
+export const updateByEmail=async (email: string, payload: Partial<OrderInput>): Promise<OrderOutput> => {
+    return  orderService.updateByEmail(email, payload)
+}
 
 export const getById = async (id: number): Promise<OrderOutput> => {
     return  orderService.getById(id)

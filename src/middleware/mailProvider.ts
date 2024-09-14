@@ -15,8 +15,9 @@ export async function sendMail(recepient:string,text:string){
 	const mailOptions = {
 	  from: 'mlio6070@outlook.com',
 	  to: recepient,
-	  subject: 'Payment Mail',
-	  text: text+"LOL",
+	  subject: 'Payment Status',
+	  text: text,
+	//   html:text
 	};
 	
 	// Send the email

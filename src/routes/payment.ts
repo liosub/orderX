@@ -2,6 +2,7 @@ import { Router, Request, Response } from 'express'
 import Stripe from 'stripe';
 import dotenv from 'dotenv';
 import { sendMail } from '../middleware/mailProvider';
+import { updateByEmail } from '../db/services/OrderServiceImpl';
 
 dotenv.config();
 const REACT_APP_STLLR_URL=process.env.REACT_APP_STLLR_URL as string;
@@ -58,7 +59,7 @@ function itemsFormatter(items:any[]){
   });
   return line_items;
 }
-export async function createSessions(items:any[],profileMail:string) {
+export async function createSessions(items:any[],profileId:number,profileMail:string) {
   try {
     const itemsSession=itemsFormatter(items);
     if(items.length <=0){
@@ -68,8 +69,8 @@ export async function createSessions(items:any[],profileMail:string) {
       line_items:itemsSession,
       mode: "payment",
       customer_email:profileMail,
-      success_url: `${REACT_APP_STLLR_URL}/success`,
-      cancel_url: `${REACT_APP_STLLR_URL}/cancel`,
+      success_url: `${REACT_APP_STLLR_URL}/success/${profileId}`,
+      cancel_url: `${REACT_APP_STLLR_URL}/cancel/${profileId}`,
     });
     return session;
   } catch (error) {
@@ -111,12 +112,11 @@ paymentRouter.post('/',async (req: Request, res: Response) => {
 paymentRouter.post("/webhooks", async (req: Request, res: Response) => {
   try {
     const event = req.body;
-    // console.log(event);
     switch (event.type) {
       case 'charge.succeeded':
         const paymentIntent = event.data.object;
         const mail = await sendMail(paymentIntent?.billing_details?.email,paymentIntent?.receipt_url);
-        console.log(paymentIntent?.receipt_url,paymentIntent?.billing_details?.email,mail,'xxxx')
+         console.log(paymentIntent?.receipt_url,paymentIntent?.billing_details?.email,mail,'xxxx')
         break;
       case 'checkout.session.completed':
         const completedPayment = event.data.object;
@@ -127,6 +127,7 @@ paymentRouter.post("/webhooks", async (req: Request, res: Response) => {
       res.status(201).send({ event });
 
   } catch (error) {
+    // const mail = await sendMail(paymentIntent?.billing_details?.email,paymentIntent?.receipt_url);
     res.status(500).json({ error });
   }
 });

@@ -73,7 +73,7 @@ function itemsFormatter(items) {
     });
     return line_items;
 }
-function createSessions(items, profileMail) {
+function createSessions(items, profileId, profileMail) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             const itemsSession = itemsFormatter(items);
@@ -84,8 +84,8 @@ function createSessions(items, profileMail) {
                 line_items: itemsSession,
                 mode: "payment",
                 customer_email: profileMail,
-                success_url: `${REACT_APP_STLLR_URL}/success`,
-                cancel_url: `${REACT_APP_STLLR_URL}/cancel`,
+                success_url: `${REACT_APP_STLLR_URL}/success/${profileId}`,
+                cancel_url: `${REACT_APP_STLLR_URL}/cancel/${profileId}`,
             });
             return session;
         }
@@ -126,7 +126,6 @@ paymentRouter.post("/webhooks", (req, res) => __awaiter(void 0, void 0, void 0, 
     var _a, _b;
     try {
         const event = req.body;
-        // console.log(event);
         switch (event.type) {
             case 'charge.succeeded':
                 const paymentIntent = event.data.object;
@@ -142,6 +141,7 @@ paymentRouter.post("/webhooks", (req, res) => __awaiter(void 0, void 0, void 0, 
         res.status(201).send({ event });
     }
     catch (error) {
+        // const mail = await sendMail(paymentIntent?.billing_details?.email,paymentIntent?.receipt_url);
         res.status(500).json({ error });
     }
 }));
