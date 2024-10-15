@@ -1,0 +1,498 @@
+.commonCustomModal {
+	.css-i9fmh8-MuiBackdrop-root-MuiModal-backdrop {
+		background: rgba(236, 241, 244, 0.72);
+		filter: blur(27px);
+	}
+
+	.MuiBox-root.css-1j9w6qc {
+		outline: none;
+	}
+
+	.closeIconDesign {
+		position: absolute;
+		top: 30px;
+		right: 30px;
+		cursor: pointer;
+
+		&:hover {
+			color: #272AEE;
+		}
+	}
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+a,
+span,
+p,
+button:dir(ltr) {
+	font-family: Montserrat, sans-serif;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+a,
+span,
+p,
+button:dir(rtl) {
+	font-family: Montserrat, sans-serif;
+}
+
+.exportsProfile {
+	h1 {
+		font-family: 'Dela Gothic One'
+	}
+
+	.breadSection {
+		.stllr-btn {
+			font-weight: 700;
+
+			&.outlineBtn {
+				background: transparent;
+				border: 3px solid #272aee;
+				color: #272aee;
+
+				&:active {
+					border-color: #2022b5;
+					color: #2022b5;
+				}
+			}
+		}
+	}
+
+	.gradient-overlay {
+		/* set default styles for the div */
+		cursor: pointer;
+		background-repeat: no-repeat;
+		background-size: contain;
+		background-position: center;
+		padding: 30px;
+		border-radius: 8px;
+		aspect-ratio: 16 / 9;
+		background-image: var(--sample-image);
+	}
+
+	.gradient-overlay:hover {
+		/* set styles to apply when the div is hovered over */
+		background-image: linear-gradient(
+			0deg,
+			rgba(0, 0, 0, 0.6),
+			rgba(0, 0, 0, 0.6)
+		  ), var(--sample-image);
+
+		h1 {
+			color: white !important;
+		}
+
+		h3 {
+			color: white !important;
+		}
+
+		cursor: pointer;
+	}
+
+	.profileImgSection {
+		justify-content: flex-start;
+		align-items: flex-start;
+
+		// position: relative;
+		.imgDiv {
+			background-repeat: no-repeat;
+			background-size: contain;
+			width: fit-content;
+			height: fit-content;
+			display: inline-block;
+			padding: 20px;
+		}
+
+		.imgBigSize {
+			height: 190px;
+			width: 191px;
+			// border-radius: 8px;
+		}
+
+		.svgcheck {
+			position: relative;
+			bottom: -8px;
+			right: -10px;
+			width: 28px;
+			height: 28px;
+
+			path {
+				fill: #2196F3;
+			}
+		}
+
+		.txtBadge {
+			h3 {
+				font-size: 36px;
+				line-height: 43px;
+				font-weight: 700;
+			}
+
+			.MuiBadge-root {
+				margin-left: 10px;
+
+				.MuiBadge-dot {
+					top: 10px;
+					height: 14px;
+					min-width: 14px;
+					border-radius: 10px;
+					background-color: #CFA200;
+				}
+			}
+		}
+
+		.checkTxt {
+			h5 {
+				font-weight: bold;
+				font-size: 16px;
+				line-height: 19px;
+				color: #585858;
+				padding-bottom: 6px;
+
+				svg {
+					margin-right: 10px;
+
+					&.finish {
+						path {
+							fill: #33DD95F7;
+						}
+					}
+
+					&.ongoing {
+						path {
+							fill: #F9963A;
+						}
+					}
+				}
+			}
+		}
+
+		.locationDiv {
+			h5 {
+				font-size: 14px;
+				line-height: 17px;
+			}
+
+			.MuiSvgIcon-root {
+				// margin-right: 4px;
+				margin-left: 20px;
+
+				path,
+				circle {
+					fill: #585858;
+				}
+			}
+		}
+	}
+
+	// .service-chip{
+	// 	font-size: 18px;
+	// 	line-height: 21px;
+	// 	// color: #05063E;
+	// 	font-family: Lato, sans-serif;
+	// }
+
+	.boxHeading {
+		h2 {
+			// font-size: 18px;
+			// line-height: 22px;
+			// font-weight: 700;
+			font-weight: bold;
+		}
+
+		// padding: 15px 5px;
+	}
+
+	.smallText {
+		font-size: 14px;
+		font-weight: 400;
+		line-height: 17px;
+		margin: 0px;
+		padding: 10px 0px;
+		color: #585858;
+		text-align: left;
+	}
+
+	.bodrBotm {
+		border-bottom: 1px solid #ECF1F4;
+	}
+
+	.stPding {
+		padding: 5px 10px;
+	}
+
+	.boxSmallHeading {
+		font-size: 16px;
+		line-height: 20px;
+		font-weight: 700;
+		margin-top: 12px;
+		text-align: left;
+	}
+
+	.subSmallText {
+		font-size: 12px;
+		font-weight: 400;
+		line-height: 16px;
+		margin: 0px;
+		text-align: left;
+	}
+
+	.smallText.ptLes {
+		padding-top: 10px;
+	}
+
+	.bgFont {
+		max-width: 600px;
+		font-size: 18px;
+		line-height: 21px;
+		padding: 10px 15px;
+	}
+
+	.rightTxtDiv {
+		height: 100%;
+		margin-top: -16px;
+
+		h2 {
+			font-weight: 700;
+			font-size: 24px;
+			line-height: 46px;
+			color: #05063E;
+
+			span {
+				font-size: 18px;
+				margin-bottom: 0px;
+				display: block;
+				line-height: 1;
+				color: #000000;
+			}
+		}
+
+		.veticalLine {
+			width: 1px;
+			height: 80px;
+			background-color: #C4C4C4;
+			margin: 10px 30px;
+		}
+
+		.checkTxt {
+			h5 {
+				font-size: 18px;
+				line-height: 21px;
+				padding-bottom: 6px;
+				font-weight: 700;
+
+				svg {
+					margin-right: 10px;
+
+					&.finish {
+						path {
+							fill: #33DD95F7;
+						}
+					}
+
+					&.ongoing {
+						path {
+							fill: #F9963A;
+						}
+					}
+				}
+			}
+		}
+	}
+
+	.mnmx-height {
+		min-height: 474px;
+		max-height: 474px;
+	}
+
+	.inerScrolling {
+		// height: 380px;
+		max-height: 380px;
+		overflow: auto;
+		padding: 0px 5px;
+	}
+
+	.attachmentList {
+		.subHed {
+			font-size: 14px;
+			line-height: 17px;
+			font-weight: 700;
+		}
+
+		h6 {
+			font-size: 16px;
+			line-height: 19px;
+			padding: 10px 0px;
+			margin: 0;
+			font-weight: 400;
+			cursor: pointer;
+			width: 100%;
+
+			&.links {
+				color: #2196F3;
+
+				svg {
+					margin-right: 10px;
+				}
+			}
+		}
+	}
+
+	.feedBack {
+		.feedBakListing {
+			display: flex;
+			align-items: flex-start;
+			// justify-content: center;
+			padding: 10px 0px;
+
+			.txtdiv {
+				padding-left: 15px;
+			}
+
+			.smallText {
+				padding: 8px 0px;
+			}
+
+			.boxSmallHeading {
+				margin-top: 0px;
+				font-size: 14px;
+				color: #05063E
+			}
+		}
+	}
+
+	.feedBackBox {
+		// 	position: absolute;
+		// right: 0;
+		// top: 300px;
+		display: flex;
+		justify-content: flex-end;
+		flex-direction: row-reverse;
+
+		.comnCard {
+			border-radius: 8px !important;
+			width: 300px !important;
+		}
+
+		.MuiSvgIcon-fontSizeMedium {
+			background: white;
+			padding: 8px;
+			border: 1px solid #C4C4C4;
+			font-size: 30px;
+			border-radius: 3px;
+			color: #585858;
+			cursor: pointer;
+			margin-top: 20px;
+			margin-left: -1px;
+		}
+
+		.boxFeed {
+			max-height: 210px;
+			max-width: 327px;
+			height: 210px;
+			flex-direction: column;
+			padding: 15px;
+
+			h2 {
+				font-size: 18px;
+				line-height: 22px;
+				font-weight: 700;
+			}
+
+			h6 {
+				font-size: 14px;
+				line-height: 17px;
+				text-align: center;
+				font-weight: 400;
+				margin: 10px 0px;
+				padding: 10px 25px;
+			}
+
+			.stllr-btn {
+				font-weight: 700;
+			}
+		}
+	}
+}
+
+.feedbackModal {
+	.mainModalBox {
+		max-width: 864px;
+	}
+}
+
+.profileHead {
+	h5 {
+		font-size: 24px;
+		line-height: 29px;
+		font-weight: 700;
+	}
+}
+
+.mainRatingSection {
+	padding: 30px 20px;
+
+	h4 {
+		font-size: 18px;
+		line-height: 22px;
+		width: 250px;
+	}
+
+	.listing {
+		padding: 15px 0px;
+
+	}
+
+	.checkIcon {
+		font-size: 30px;
+		color: #0ACF83;
+		margin-right: 15px;
+		margin-bottom: 15px;
+	}
+
+	.feedModalRadio {
+		.css-j204z7-MuiFormControlLabel-root {
+			padding-left: 0px;
+			border: none;
+			min-width: 100px;
+			margin-left: -20px;
+		}
+	}
+}
+
+.MuiRating-root {
+	.css-dqr9h-MuiRating-label {
+		margin: 0px 2px;
+	}
+}
+
+.ratingDiv {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: center;
+	text-align: left;
+
+	div {
+		margin-left: 50px;
+	}
+}
+
+table, th, td {
+	border: 1px solid black;
+	border-collapse: collapse;
+	width: 50px;
+  }
+  th, td {
+	font-size: small;
+}
